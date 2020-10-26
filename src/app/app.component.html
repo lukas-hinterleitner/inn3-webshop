@@ -1,0 +1,63 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+
+        <ion-list id="inbox-list">
+          <ion-list-header>NFC Webshop</ion-list-header>
+          <ion-note>Innovation Lab 3</ion-note>
+
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+            <ion-item (click)="currentPath = p.url" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="p.url == currentPath">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+
+        <ion-list>
+          <ion-note>Account</ion-note>
+          <div *ngIf="!isLoggedIn">
+            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of authenticationPages; let j = index">
+              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" [routerLink]="[authenticationPage.url]" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
+                <ion-icon slot="start" [ios]="authenticationPage.icon + '-outline'" [md]="authenticationPage.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ authenticationPage.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </div>
+
+          <div *ngIf="isLoggedIn">
+            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of userPages; let j = index">
+              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" [routerLink]="[authenticationPage.url]" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
+                <ion-icon slot="start" [ios]="authenticationPage.icon + '-outline'" [md]="authenticationPage.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ authenticationPage.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <ion-menu-toggle autoHide="false">
+              <ion-item button (click)="logout()" detail="false">
+                <ion-icon slot="start" name="log-out"></ion-icon>
+                <ion-label>
+                  Logout
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </div>
+        </ion-list>
+
+        <ion-list>
+          <ion-note>Micellaneous</ion-note>
+          <ion-item>
+            <ion-icon slot="start" name="moon-outline"></ion-icon>
+            <ion-label>
+              Dark Mode
+            </ion-label>
+            <ion-toggle [(ngModel)]="darkMode" (ionChange)="toggleDarkTheme()"></ion-toggle>
+          </ion-item>
+        </ion-list>
+
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>
