@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Product} from '../../objects/product';
 import {ProductService} from '../../services/product.service';
 import {Router} from '@angular/router';
+import {LoadingService} from '../../services/loading.service';
 
 @Component({
     selector: 'app-product',
@@ -10,24 +11,29 @@ import {Router} from '@angular/router';
     styleUrls: ['./product.page.scss'],
 })
 export class ProductPage implements OnInit {
-    public product: Product;
+    public product: Product = new Product('-1', '', '', 0, '');
+    public productLoaded: boolean;
     public quantity: number;
 
-    constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private router: Router) {
-        this.product = new Product('-1', '', '', 0, '');
+    constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private router: Router,
+                private loadingService: LoadingService) {
         this.quantity = 1;
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.loadingService.showLoading(false);
+
         if (this.activatedRoute.snapshot.paramMap.has('id')) {
             const productId = this.activatedRoute.snapshot.paramMap.get('id');
 
             if (this.productService.getProductById(productId) !== undefined) {
                 this.product = this.productService.getProductById(productId);
+                this.productLoaded = true;
             }
         } else {
-            this.router.navigate(['/products']);
-            console.log("navigated");
+            await this.router.navigate(['/products']);
         }
+
+        await this.loadingService.closeLoading();
     }
 }

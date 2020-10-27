@@ -11,7 +11,7 @@ export class ProductService {
   constructor() {
     this.products = new Map<string, Product>();
 
-    const newProduct = new Product('1', 'NFC Tags', 'Die besten NFC Tags zum besten Preis',
+    const newProduct = new Product('1', 'NFC Tags', 'Die besten NFC Tags zum besten Preis. Die besten NFC Tags zum besten Preis',
         19.99, '../../../assets/images/sample-product.jpeg');
 
     this.products = this.products.set(newProduct.getId(), newProduct);
