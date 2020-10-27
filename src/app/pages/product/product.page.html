@@ -1,12 +1,22 @@
 <ion-header>
   <ion-toolbar>
     <ion-row>
+      <ion-back-button></ion-back-button>
       <ion-menu-button></ion-menu-button>
-      <ion-title>Product xyz</ion-title>
+      <ion-title>{{product.getTitle()}}</ion-title>
     </ion-row>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <ion-card class="ion-margin">
+    <ion-img [src]="product.getImage()"></ion-img>
+    <ion-card-header>
+      <ion-card-title>{{product.getTitle()}}</ion-card-title>
+      <ion-card-subtitle>{{product.getPrice() | currency:'EUR'}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{product.getDescription()}}
+    </ion-card-content>
+  </ion-card>
 </ion-content>

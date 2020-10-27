@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../services/authentication.service';
 
 import {Router} from '@angular/router';
-import {LoginCredentials} from '../../objects/login-credentials';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {LoadingService} from '../../services/loading.service';
@@ -13,7 +12,6 @@ import {LoadingService} from '../../services/loading.service';
     styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-    public credentials: LoginCredentials;
     public loginForm: FormGroup;
 
     public validation_messages = {
@@ -39,8 +37,6 @@ export class LoginPage implements OnInit {
                                                         Validators.required,
                                                     ])]
         });
-
-        this.credentials = new LoginCredentials('', '');
     }
 
     ngOnInit() {
@@ -50,12 +46,14 @@ export class LoginPage implements OnInit {
         await this.loadingService.showLoading();
 
         if (this.loginForm.valid) {
-            this.credentials.setEmail(this.loginForm.get('email').value);
-            this.credentials.setPassword(this.loginForm.get('password').value);
+            const email = this.loginForm.get('email').value;
+            const password = this.loginForm.get('password').value;
 
+            // TODO encryption
+            // TODO password hashing
             // TODO get userdata from server
 
-            await this.authenticationService.login(this.credentials.getEmail());
+            await this.authenticationService.login(email);
             await this.router.navigate(['/user/general']);
         } else {
             // TODO view error messages

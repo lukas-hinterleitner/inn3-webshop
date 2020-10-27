@@ -1,12 +1,25 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>Products</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row>
+            <ion-menu-button></ion-menu-button>
+            <ion-title>Products</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding ion-justify-content-center">
+    <ion-row>
+        <ion-searchbar show-cancel-button="focus" cancel-button-icon="close"></ion-searchbar>
+    </ion-row>
 
+    <ion-card *ngFor="let product of products" [routerLink]="['/product/' + product.getId()]" class="ion-margin">
+        <ion-img [src]="product.getImage()"></ion-img>
+        <ion-card-header>
+            <ion-card-title>{{product.getTitle()}}</ion-card-title>
+            <ion-card-subtitle>{{product.getPrice() | currency:'EUR'}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            {{product.getDescription() | slice: 0:30}} ...
+        </ion-card-content>
+    </ion-card>
 </ion-content>

@@ -10,6 +10,10 @@ const routes: Routes = [
     },
     {
         path: 'product',
+        redirectTo: 'products'
+    },
+    {
+        path: 'product/:id',
         loadChildren: () => import('./pages/product/product.module').then(m => m.ProductPageModule)
     },
     {
