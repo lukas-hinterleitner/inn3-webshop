@@ -10,18 +10,15 @@ export class ProductService {
 
   constructor() {
     this.products = new Map<string, Product>();
+
+    const newProduct = new Product('1', 'NFC Tags', 'Die besten NFC Tags zum besten Preis',
+        19.99, '../../../assets/images/sample-product.jpeg');
+
+    this.products = this.products.set(newProduct.getId(), newProduct);
   }
 
   getAllProducts() {
     // TODO get products from server
-
-    const newProduct = new Product(1, 'NFC Tags', 'Die besten NFC Tags zum besten Preis',
-                                 19.99, '../../../assets/images/sample-product.jpeg');
-
-    this.products = this.products.set(newProduct.getId(), newProduct);
-
-    // TODO get products from server
-
     return this.products;
   }
 

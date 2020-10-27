@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-row>
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="products"></ion-back-button>
       <ion-menu-button></ion-menu-button>
       <ion-title>{{product.getTitle()}}</ion-title>
     </ion-row>
@@ -16,7 +16,26 @@
       <ion-card-subtitle>{{product.getPrice() | currency:'EUR'}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      {{product.getDescription()}}
+      <ion-row>
+        <p>{{product.getDescription()}}</p>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-no-padding" size="3">
+          <ion-item class="ion-no-padding">
+            <ion-label position="fixed">Amount</ion-label>
+            <ion-input inputmode="numberic" min="1" max="20" type="number" [(ngModel)]="quantity"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+
+        </ion-col>
+        <ion-col size="3">
+          <ion-button fill="outline">
+            <ion-icon slot="start" name="cart"></ion-icon>
+            Add to cart
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 </ion-content>

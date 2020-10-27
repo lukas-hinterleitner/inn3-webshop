@@ -14,10 +14,11 @@ export class ProductPage implements OnInit {
     public quantity: number;
 
     constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private router: Router) {
+        this.product = new Product('-1', '', '', 0, '');
         this.quantity = 1;
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         if (this.activatedRoute.snapshot.paramMap.has('id')) {
             const productId = this.activatedRoute.snapshot.paramMap.get('id');
 
@@ -25,7 +26,7 @@ export class ProductPage implements OnInit {
                 this.product = this.productService.getProductById(productId);
             }
         } else {
-            await this.router.navigate(['/products']);
+            this.router.navigate(['/products']);
             console.log("navigated");
         }
     }
