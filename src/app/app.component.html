@@ -3,7 +3,7 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
 
-        <ion-list id="inbox-list">
+        <ion-list class="main-menu">
           <ion-list-header>NFC Webshop</ion-list-header>
           <ion-note>Innovation Lab 3</ion-note>
 
@@ -15,7 +15,7 @@
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-list>
+        <ion-list class="main-menu">
           <ion-note>Account</ion-note>
           <div *ngIf="!isLoggedIn">
             <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of authenticationPages; let j = index">
@@ -47,7 +47,7 @@
 
         <ion-list>
           <ion-note>Micellaneous</ion-note>
-          <ion-item>
+          <ion-item lines="none">
             <ion-icon slot="start" name="moon-outline"></ion-icon>
             <ion-label>
               Dark Mode

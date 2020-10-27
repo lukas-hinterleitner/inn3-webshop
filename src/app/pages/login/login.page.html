@@ -8,13 +8,21 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <form (ngSubmit)="login()" [ngFormOptions]="{updateOn: 'submit'}" [noValidate]="false">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" [noValidate]="false">
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="9">
                 <ion-item>
-                    <ion-label position="floating">Username</ion-label>
-                    <ion-input name="email" [(ngModel)]="user.email" required="true"></ion-input>
+                    <ion-label position="floating">Email</ion-label>
+                    <ion-input name="email" formControlName="email"></ion-input>
                 </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.email">
+                        <div class="error-message" *ngIf="loginForm.get('email').hasError(validation.type) &&
+                                                          (loginForm.get('email').dirty || loginForm.get('email').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -22,14 +30,22 @@
             <ion-col size-lg="6" size-md="9">
                 <ion-item>
                     <ion-label position="floating">Password</ion-label>
-                    <ion-input name="password" [(ngModel)]="user.password" type="password" required="true"></ion-input>
+                    <ion-input name="password" formControlName="password" type="password"></ion-input>
                 </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.password">
+                        <div class="error-message" *ngIf="loginForm.get('password').hasError(validation.type) &&
+                                                          (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
             </ion-col>
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="9">
-                <ion-button type="submit" expand="full" color="primary">Login</ion-button>
+                <ion-button shape="round" type="submit" expand="full" color="primary">Login</ion-button>
             </ion-col>
         </ion-row>
     </form>

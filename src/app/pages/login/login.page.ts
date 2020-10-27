@@ -1,30 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../services/authentication.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from '../../services/authentication.service';
 
+import {Router} from '@angular/router';
+import {LoginCredentials} from '../../objects/login-credentials';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
-import { Router} from '@angular/router';
+import {LoadingService} from '../../services/loading.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+    selector: 'app-login',
+    templateUrl: './login.page.html',
+    styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  public user = {email: '', password: ''};
+    public credentials: LoginCredentials;
+    public loginForm: FormGroup;
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+    public validation_messages = {
+        email: [
+            { type: 'required', message: 'Email is required.' },
+            { type: 'email', message: 'Wrong email format.' },
+        ],
+        password: [
+            { type: 'required', message: 'Password is required.' }
+        ],
+    };
 
-  ngOnInit() {
-  }
+    constructor(private authenticationService: AuthenticationService, private router: Router, private formBuilder: FormBuilder,
+                private loadingService: LoadingService) {
+        // create form group
+        this.loginForm = this.formBuilder.group({
+            email: ['', Validators.compose([
+                                                        Validators.required,
+                                                        Validators.email,
+                                                    ])],
+            password: ['', Validators.compose([
+                                                        Validators.minLength(8),
+                                                        Validators.required,
+                                                    ])]
+        });
 
-  async login() {
-    // TODO get userdata from server
+        this.credentials = new LoginCredentials('', '');
+    }
 
-    await this.authenticationService.login(this.user.email);
-    await this.router.navigate(['user/general']);
+    ngOnInit() {
+    }
 
-    this.user.email = '';
-    this.user.password = '';
-  }
+    async login() {
+        await this.loadingService.showLoading();
 
+        if (this.loginForm.valid) {
+            this.credentials.setEmail(this.loginForm.get('email').value);
+            this.credentials.setPassword(this.loginForm.get('password').value);
+
+            // TODO get userdata from server
+
+            await this.authenticationService.login(this.credentials.getEmail());
+            await this.router.navigate(['/user/general']);
+        } else {
+            // TODO view error messages
+            this.loginForm.markAllAsTouched();
+        }
+
+        await this.loadingService.closeLoading();
+    }
 }

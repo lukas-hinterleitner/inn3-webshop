@@ -16,7 +16,6 @@ export class AuthenticationService {
         this.loggedIn.next(true);
       }
     });
-
   }
 
   login(username: string): Promise<any> {
