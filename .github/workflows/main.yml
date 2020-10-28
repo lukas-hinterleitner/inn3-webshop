@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: automatic deploy
+name: automatic deploy to server 
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,15 +22,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      #- name: Deploy to Staging server
-      #  uses: easingthemes/ssh-deploy@v2.1.5
-      #  env:
-      #    SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-      #    #ARGS: "-rltgoDzvO" 
-      #    SOURCE: ""
-      #    REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-      #    REMOTE_USER: ${{ secrets.REMOTE_USER }}
-      #    TARGET: ${{ secrets.REMOTE_TARGET }}
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
       - name: SSH Server Deploy
         uses: kostya-ten/ssh-server-deploy@v3
         with:
@@ -38,5 +34,5 @@ jobs:
           port: 22
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
-          scp_source: index.php favicon.png includes inc images e assets
+          scp_source: www
           scp_target: ~/html/webshop
