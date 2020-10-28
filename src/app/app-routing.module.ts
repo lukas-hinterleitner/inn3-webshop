@@ -52,13 +52,16 @@ const routes: Routes = [
         path: 'user/general',
         loadChildren: () => import('./pages/user/general/general.module').then(m => m.GeneralPageModule),
         canLoad: [AuthGuard],
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
     },
+    //{
+    //    path: '**'
+    //},
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})
+        RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules, useHash: true})
     ],
     exports: [RouterModule]
 })

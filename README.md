@@ -9,7 +9,7 @@ Execute the following command in the command line:
 
 `npm install @ionic/angular@latest --save`
 
-##Get Started
+## Get Started
 1. Clone the repository:
 
     `git clone https://github.com/lukas-hinterleitner/inn3-webshop.git`

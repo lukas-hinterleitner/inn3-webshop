@@ -17,7 +17,6 @@ import {Router} from '@angular/router';
 export class AppComponent implements OnInit {
     public isLoggedIn = false;
 
-    public darkMode = true;
     public currentPath = 'home';
     public appPages = [
         {
@@ -63,8 +62,8 @@ export class AppComponent implements OnInit {
         },
     ];
 
-    toggleDarkTheme() {
-        document.body.classList.toggle('dark', this.darkMode);
+    toggleDarkTheme(shouldAdd: boolean) {
+        document.body.classList.toggle('dark', shouldAdd);
     }
 
     constructor(
@@ -76,10 +75,10 @@ export class AppComponent implements OnInit {
         private loadingService: LoadingService
     ) {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        this.toggleDarkTheme();
+        this.toggleDarkTheme(prefersDark.matches);
 
         prefersDark.addEventListener('change', mediaQuery => {
-            this.toggleDarkTheme();
+            this.toggleDarkTheme(mediaQuery.matches);
         });
 
         this.authenticationService.isLoggedIn().subscribe(value => {
