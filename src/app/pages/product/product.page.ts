@@ -4,6 +4,8 @@ import {Product} from '../../objects/product';
 import {ProductService} from '../../services/product.service';
 import {Router} from '@angular/router';
 import {LoadingService} from '../../services/loading.service';
+import {CartService} from '../../services/cart.service';
+import {CartProduct} from '../../objects/cart-product';
 
 @Component({
     selector: 'app-product',
@@ -16,7 +18,7 @@ export class ProductPage implements OnInit {
     public quantity: number;
 
     constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private router: Router,
-                private loadingService: LoadingService) {
+                private loadingService: LoadingService, private cartService: CartService) {
         this.quantity = 1;
     }
 
@@ -26,8 +28,10 @@ export class ProductPage implements OnInit {
         if (this.activatedRoute.snapshot.paramMap.has('id')) {
             const productId = this.activatedRoute.snapshot.paramMap.get('id');
 
-            if (this.productService.getProductById(productId) !== undefined) {
-                this.product = this.productService.getProductById(productId);
+            const product = this.productService.getProductById(productId);
+
+            if (product !== undefined) {
+                this.product = product;
                 this.productLoaded = true;
             }
         } else {
@@ -35,5 +39,9 @@ export class ProductPage implements OnInit {
         }
 
         await this.loadingService.closeLoading();
+    }
+
+    async addToCart() {
+        this.cartService.addToCart(new CartProduct(this.product, this.quantity));
     }
 }

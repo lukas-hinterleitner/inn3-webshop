@@ -31,11 +31,11 @@
         <ion-col class="ion-no-padding" size="5">
           <ion-item class="ion-no-padding">
             <ion-label position="fixed">Amount</ion-label>
-            <ion-input inputmode="numberic" min="1" max="20" type="number" [(ngModel)]="quantity"></ion-input>
+            <ion-input inputmode="numeric" min="1" max="20" type="number" [(ngModel)]="quantity"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="7">
-          <ion-button class="ion-float-end ion-no-margin" fill="outline">
+          <ion-button (click)="addToCart()" class="ion-float-end ion-no-margin" fill="outline">
             <ion-icon slot="start" name="cart"></ion-icon>
             Add to cart
           </ion-button>

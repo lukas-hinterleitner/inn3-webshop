@@ -14,7 +14,7 @@ import {Router} from '@angular/router';
 export class ProductsPage implements OnInit {
     public products: Set<Product>;
     public arr = Array(10);
-    public productsLoaded: boolean = false;
+    public productsLoaded: boolean;
 
     constructor(private productService: ProductService, private loadingService: LoadingService, private router: Router) {
         this.products = new Set<Product>();

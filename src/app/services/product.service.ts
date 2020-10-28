@@ -6,7 +6,7 @@ import {Product} from '../objects/product';
   providedIn: 'root'
 })
 export class ProductService {
-  private products: Map<string, Product>;
+  private readonly products: Map<string, Product>;
 
   constructor() {
     this.products = new Map<string, Product>();
@@ -19,7 +19,7 @@ export class ProductService {
           anim id est laborum.`,
         19.99, '../../../assets/images/sample-product.jpeg');
 
-    this.products = this.products.set(newProduct.getId(), newProduct);
+    this.products.set(newProduct.getId(), newProduct);
   }
 
   getAllProducts() {

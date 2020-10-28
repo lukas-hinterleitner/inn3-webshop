@@ -1,12 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>Cart</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row>
+            <ion-menu-button></ion-menu-button>
+            <ion-title>Shopping Cart</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+    <ng-container *ngIf="products.length > 0" >
+        <ion-item class="ion-margin-bottom" *ngFor="let cartProduct of products">
+            <ion-avatar slot="start">
+                <ion-img [src]="cartProduct.getProduct().getImage()"></ion-img>
+            </ion-avatar>
+            <ion-grid>
+                <ion-row class="ion-align-items-center">
+                    <ion-col class="ion-margin-end" size="6">
+                        <ion-label>
+                            <h2>{{cartProduct.getProduct().getTitle()}}</h2>
+                            <h3>{{cartProduct.getProduct().getPrice() | currency: 'EUR'}}</h3>
+                        </ion-label>
+                    </ion-col>
+
+                    <ion-col class="ion-margin-end" size="auto">
+                        <ion-item class="ion-no-padding">
+                            <ion-label position="fixed">Amount</ion-label>
+                            <ion-input value="0" inputmode="numeric" min="1" max="20" type="number"></ion-input>
+                        </ion-item>
+                    </ion-col>
+
+                    <ion-col class="ion-justify-content-end ion-float-end" size="auto">
+                        <ion-button (click)="removeFromCart(cartProduct)" class="ion-float-end">
+                            <ion-icon slot="icon-only" name="close"></ion-icon>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+    </ng-container>
+
+    <div *ngIf="products.length === 0" id="container">
+        <h2>Cart is empty!</h2>
+    </div>
 
 </ion-content>

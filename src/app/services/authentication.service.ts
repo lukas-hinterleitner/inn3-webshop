@@ -1,58 +1,64 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Storage} from '@ionic/storage';
 
+import {Platform} from '@ionic/angular';
+
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthenticationService {
-  HAS_LOGGED_IN = 'hasLoggedIn';
+    HAS_LOGGED_IN = 'hasLoggedIn';
 
-  private loggedIn = new BehaviorSubject(false);
+    private loggedIn = new BehaviorSubject(false);
 
-  constructor(private storage: Storage) {
-    this.storage.get(this.HAS_LOGGED_IN).then(value => {
-      if (value === true) {
-        this.loggedIn.next(true);
-      }
-    });
-  }
+    constructor(private storage: Storage, private platform: Platform) {
+        this.checkAuthData().then(_ => {});
+    }
 
-  login(username: string): Promise<any> {
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
-      await this.setUsername(username);
-      this.loggedIn.next(true);
-      return window.dispatchEvent(new CustomEvent('user:login'));
-    });
-  }
+    async checkAuthData() {
+        const loggedIn = await this.storage.get(this.HAS_LOGGED_IN);
 
-  signup(username: string): Promise<any> {
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
-      await this.setUsername(username);
-      return window.dispatchEvent(new CustomEvent('user:signup'));
-    });
-  }
+        if (loggedIn) {
+            this.loggedIn.next(true);
+        }
+    }
 
-  logout(): Promise<any> {
-    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      this.loggedIn.next(false);
-      return this.storage.remove('username');
-    }).then(() => {
-      window.dispatchEvent(new CustomEvent('user:logout'));
-    });
-  }
+    login(username: string): Promise<any> {
+        return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
+            await this.setUsername(username);
+            this.loggedIn.next(true);
+            return window.dispatchEvent(new CustomEvent('user:login'));
+        });
+    }
 
-  setUsername(username: string): Promise<any> {
-    return this.storage.set('username', username);
-  }
+    signup(username: string): Promise<any> {
+        return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
+            await this.setUsername(username);
+            return window.dispatchEvent(new CustomEvent('user:signup'));
+        });
+    }
 
-  getUsername(): Promise<string> {
-    return this.storage.get('username').then((value) => {
-      return value;
-    });
-  }
+    logout(): Promise<any> {
+        return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
+            this.loggedIn.next(false);
+            return this.storage.remove('username');
+        }).then(() => {
+            window.dispatchEvent(new CustomEvent('user:logout'));
+        });
+    }
 
-  isLoggedIn(): Observable<boolean> {
-    return this.loggedIn;
-  }
+    setUsername(username: string): Promise<any> {
+        return this.storage.set('username', username);
+    }
+
+    getUsername(): Promise<string> {
+        return this.storage.get('username').then((value) => {
+            return value;
+        });
+    }
+
+    isLoggedIn(): Observable<boolean> {
+        return this.loggedIn;
+    }
 }

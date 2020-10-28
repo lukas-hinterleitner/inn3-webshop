@@ -15,8 +15,9 @@ import {Router} from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    public isLoggedIn = false;
+    public darkMode: boolean;
 
+    public isLoggedIn = false;
     public currentPath = 'home';
     public appPages = [
         {
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
             icon: 'albums'
         },
         {
-            title: 'Cart',
+            title: 'Shopping Cart',
             url: '/cart',
             icon: 'cart'
         },
@@ -63,6 +64,7 @@ export class AppComponent implements OnInit {
     ];
 
     toggleDarkTheme(shouldAdd: boolean) {
+        this.darkMode = shouldAdd;
         document.body.classList.toggle('dark', shouldAdd);
     }
 

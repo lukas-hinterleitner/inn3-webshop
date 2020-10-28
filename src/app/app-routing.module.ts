@@ -19,8 +19,8 @@ const routes: Routes = [
     {
         path: 'checkout',
         loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutPageModule),
-        canLoad: [AuthGuard],
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
     },
     {
         path: 'cart',
@@ -45,18 +45,15 @@ const routes: Routes = [
     {
         path: 'user/payment',
         loadChildren: () => import('./pages/user/payment/payment.module').then(m => m.PaymentPageModule),
-        canLoad: [AuthGuard],
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
     },
     {
         path: 'user/general',
         loadChildren: () => import('./pages/user/general/general.module').then(m => m.GeneralPageModule),
-        canLoad: [AuthGuard],
         canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
     },
-    //{
-    //    path: '**'
-    //},
 ];
 
 @NgModule({
