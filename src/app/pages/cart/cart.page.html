@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
             <ion-title>Shopping Cart</ion-title>
             <ion-col *ngIf="products.length > 0">
-                <ion-button (click)="clearCart()" class="ion-float-end">
+                <ion-button color="danger" shape="round" (click)="clearCart()" class="ion-float-end">
                     Clear cart
                 </ion-button>
             </ion-col>
@@ -13,6 +13,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+    <div *ngIf="products.length === 0" id="container">
+        <h2>Cart is empty!</h2>
+    </div>
 
     <ng-container *ngIf="products.length > 0">
         <ion-card *ngFor="let cartProduct of products">
@@ -42,18 +46,20 @@
                         </ion-col>
 
                         <ion-col class="ion-no-margin">
-                            <ion-button (click)="removeFromCart(cartProduct)" class="ion-float-end">
-                                <ion-icon slot="icon-only" name="close"></ion-icon>
+                            <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)" class="ion-float-end">
+                                <ion-icon slot="start" name="close"></ion-icon>Remove
                             </ion-button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-item>
         </ion-card>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-button shape="round" expand="full">
+                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+                Proceed to checkout
+            </ion-button>
+        </ion-row>
     </ng-container>
-
-    <div *ngIf="products.length === 0" id="container">
-        <h2>Cart is empty!</h2>
-    </div>
-
 </ion-content>

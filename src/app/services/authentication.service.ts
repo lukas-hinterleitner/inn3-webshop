@@ -24,38 +24,18 @@ export class AuthenticationService {
         }
     }
 
-    login(username: string): Promise<any> {
-        return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
-            await this.setUsername(username);
-            this.loggedIn.next(true);
-            return window.dispatchEvent(new CustomEvent('user:login'));
-        });
+    async login(username: string): Promise<any> {
+        // TODO login and check data from server
+
+        await this.storage.set(this.HAS_LOGGED_IN, true);
+        this.loggedIn.next(true);
+        return window.dispatchEvent(new CustomEvent('user:login'));
     }
 
-    signup(username: string): Promise<any> {
-        return this.storage.set(this.HAS_LOGGED_IN, true).then(async () => {
-            await this.setUsername(username);
-            return window.dispatchEvent(new CustomEvent('user:signup'));
-        });
-    }
-
-    logout(): Promise<any> {
-        return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-            this.loggedIn.next(false);
-            return this.storage.remove('username');
-        }).then(() => {
-            window.dispatchEvent(new CustomEvent('user:logout'));
-        });
-    }
-
-    setUsername(username: string): Promise<any> {
-        return this.storage.set('username', username);
-    }
-
-    getUsername(): Promise<string> {
-        return this.storage.get('username').then((value) => {
-            return value;
-        });
+    async logout(): Promise<any> {
+        await this.storage.remove(this.HAS_LOGGED_IN);
+        this.loggedIn.next(false);
+        window.dispatchEvent(new CustomEvent('user:logout'));
     }
 
     isLoggedIn(): Observable<boolean> {

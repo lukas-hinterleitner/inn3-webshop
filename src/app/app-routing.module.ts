@@ -54,6 +54,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
+    {
+        path: 'user/address',
+        loadChildren: () => import('./pages/user/address/address.module').then(m => m.AddressPageModule),
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
 ];
 
 @NgModule({

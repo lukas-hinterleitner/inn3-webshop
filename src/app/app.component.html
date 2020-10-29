@@ -19,8 +19,8 @@
         <ion-list class="main-menu">
           <ion-note>Account</ion-note>
           <div *ngIf="!isLoggedIn">
-            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of authenticationPages; let j = index" [routerLink]="[authenticationPage.url]">
-              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
+            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of authenticationPages; let j = index">
+              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" [routerLink]="[authenticationPage.url]" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
                 <ion-icon slot="start" [ios]="authenticationPage.icon + '-outline'" [md]="authenticationPage.icon + '-sharp'"></ion-icon>
                 <ion-label>{{ authenticationPage.title }}</ion-label>
               </ion-item>
@@ -53,7 +53,7 @@
             <ion-label>
               Dark Mode
             </ion-label>
-            <ion-toggle [(ngModel)]="darkMode" (ionChange)="toggleDarkTheme(darkMode)"></ion-toggle>
+            <ion-toggle [(ngModel)]="darkMode" (ionChange)="toggleDarkMode(darkMode)"></ion-toggle>
           </ion-item>
         </ion-list>
 

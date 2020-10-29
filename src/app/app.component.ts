@@ -7,6 +7,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthenticationService} from './services/authentication.service';
 import {LoadingService} from './services/loading.service';
 import {CartService} from './services/cart.service';
+import {DarkModeService} from './services/dark-mode.service';
 
 import {Router} from '@angular/router';
 
@@ -16,7 +17,7 @@ import {Router} from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    public darkMode: boolean;
+    public darkMode = false;
     public isLoggedIn = false;
     public productsInCart = 0;
     public currentPath = 'home';
@@ -62,12 +63,13 @@ export class AppComponent implements OnInit {
             url: '/user/payment',
             icon: 'card'
         },
-    ];
+        {
+            title: 'Address',
+            url: '/user/address',
+            icon: 'home'
+        },
 
-    toggleDarkTheme(shouldAdd: boolean) {
-        this.darkMode = shouldAdd;
-        document.body.classList.toggle('dark', shouldAdd);
-    }
+    ];
 
     constructor(
         private platform: Platform,
@@ -76,13 +78,11 @@ export class AppComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private router: Router,
         private loadingService: LoadingService,
-        private cartService: CartService
+        private cartService: CartService,
+        private darkModeService: DarkModeService
     ) {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        this.toggleDarkTheme(prefersDark.matches);
-
-        prefersDark.addEventListener('change', mediaQuery => {
-            this.toggleDarkTheme(mediaQuery.matches);
+        this.darkModeService.darkModeEnabled().subscribe(value => {
+            this.darkMode = value;
         });
 
         this.authenticationService.isLoggedIn().subscribe(value => {
@@ -94,6 +94,10 @@ export class AppComponent implements OnInit {
         });
 
         this.initializeApp();
+    }
+
+    toggleDarkMode(darkMode) {
+        this.darkModeService.toggleDarkTheme(darkMode);
     }
 
     initializeApp() {
