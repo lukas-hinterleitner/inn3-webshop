@@ -13,7 +13,7 @@ export class CartProduct {
         return this.product;
     }
 
-    getQuantitiy() {
+    getQuantity() {
         return this.quantity;
     }
 

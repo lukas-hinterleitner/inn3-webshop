@@ -23,8 +23,12 @@
   text-decoration: none;
 }
 
-
 ion-avatar {
   width: 80px;
   height: 80px;
 }
+
+ion-select.in-item {
+  max-width: 100%;
+}
+

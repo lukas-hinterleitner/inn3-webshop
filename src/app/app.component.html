@@ -11,6 +11,7 @@
             <ion-item (click)="currentPath = p.url" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="p.url == currentPath">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
+              <ion-badge *ngIf="p.url === '/cart'" color="primary">{{productsInCart}}</ion-badge>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
@@ -27,10 +28,10 @@
           </div>
 
           <div *ngIf="isLoggedIn">
-            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of userPages; let j = index">
-              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" [routerLink]="[authenticationPage.url]" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
-                <ion-icon slot="start" [ios]="authenticationPage.icon + '-outline'" [md]="authenticationPage.icon + '-sharp'"></ion-icon>
-                <ion-label>{{ authenticationPage.title }}</ion-label>
+            <ion-menu-toggle auto-hide="false" *ngFor="let userPage of userPages; let j = index">
+              <ion-item (click)="currentPath = userPage.url" routerDirection="root" [routerLink]="[userPage.url]" lines="none" detail="false" [class.selected]="userPage.url == currentPath">
+                <ion-icon slot="start" [ios]="userPage.icon + '-outline'" [md]="userPage.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ userPage.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
 

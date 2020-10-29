@@ -16,6 +16,7 @@ export class ProductPage implements OnInit {
     public product: Product = new Product('-1', '', '', 0, '');
     public productLoaded: boolean;
     public quantity: number;
+    public amount = new Array(20);
 
     constructor(private activatedRoute: ActivatedRoute, private productService: ProductService, private router: Router,
                 private loadingService: LoadingService, private cartService: CartService) {

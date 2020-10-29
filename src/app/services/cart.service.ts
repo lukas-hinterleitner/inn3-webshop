@@ -9,19 +9,19 @@ import {ToastService} from './toast.service';
     providedIn: 'root'
 })
 export class CartService {
-    private products: Map<string, CartProduct>;
+    private cartProducts: Map<string, CartProduct>;
     private readonly productsSubject: BehaviorSubject<CartProduct[]>;
 
     private readonly cartKey = 'PRODUCTS_IN_CART';
 
     constructor(private storage: Storage, private toastService: ToastService) {
         this.productsSubject = new BehaviorSubject<CartProduct[]>([]);
-        this.products = new Map<string, CartProduct>();
+        this.cartProducts = new Map<string, CartProduct>();
 
         this.storage.get(this.cartKey).then(async products => {
             if (products !== null && products !== undefined && products.length > 0) {
 
-                this.products = await this.readProductsFromStorage();
+                this.cartProducts = await this.readProductsFromStorage();
 
             } else {
                 console.log("cart service: no products stored");
@@ -39,7 +39,7 @@ export class CartService {
     // begin utility functions
     // ===============================================================================================================================
     private productsToArray() {
-        return Array.from(this.products.values());
+        return Array.from(this.cartProducts.values());
     }
 
     private productsFromArray(products: CartProduct[]) {
@@ -83,27 +83,36 @@ export class CartService {
     // begin basic cart operations
     // ===============================================================================================================================
     async addToCart(cartProduct: CartProduct) {
-        if (this.products.has(cartProduct.getProduct().getId())) { // product already in cart
-            // TODO
+        if (this.cartProducts.has(cartProduct.getProduct().getId())) { // product already in cart
+            await this.toastService.showToast(2000, '', 'Product already in cart.', 'primary');
         } else {
-            this.products.set(cartProduct.getProduct().getId(), cartProduct); // add product to cart
+            this.cartProducts.set(cartProduct.getProduct().getId(), cartProduct); // add product to cart
             await this.toastService.showToast(2000, '',
-                cartProduct.getProduct().getTitle() + ' added to cart. Amount: ' + cartProduct.getQuantitiy(),
+                cartProduct.getProduct().getTitle() + ' added to cart. Amount: ' + cartProduct.getQuantity(),
                 'success');
         }
 
-        await this.writeProductsToStorage();
-        this.notifySubscribers();
+        await this.updateProductsInCart();
+    }
+
+    async removeAllProductsFromCart() {
+        this.cartProducts.clear();
+        console.log(this.cartProducts);
+        await this.updateProductsInCart();
     }
 
     async removeFromCart(product: CartProduct) {
-        this.products.delete(product.getProduct().getId());
-        await this.writeProductsToStorage();
-        this.notifySubscribers();
+        this.cartProducts.delete(product.getProduct().getId());
+        await this.updateProductsInCart();
     }
 
     getProductsInCart() {
         return this.productsSubject;
+    }
+
+    async updateProductsInCart() {
+        await this.writeProductsToStorage();
+        this.notifySubscribers();
     }
     // end basic cart operations
     // ===============================================================================================================================

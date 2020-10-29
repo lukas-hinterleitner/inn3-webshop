@@ -6,6 +6,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AuthenticationService} from './services/authentication.service';
 import {LoadingService} from './services/loading.service';
+import {CartService} from './services/cart.service';
 
 import {Router} from '@angular/router';
 
@@ -16,8 +17,8 @@ import {Router} from '@angular/router';
 })
 export class AppComponent implements OnInit {
     public darkMode: boolean;
-
     public isLoggedIn = false;
+    public productsInCart = 0;
     public currentPath = 'home';
     public appPages = [
         {
@@ -74,7 +75,8 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private authenticationService: AuthenticationService,
         private router: Router,
-        private loadingService: LoadingService
+        private loadingService: LoadingService,
+        private cartService: CartService
     ) {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         this.toggleDarkTheme(prefersDark.matches);
@@ -85,6 +87,10 @@ export class AppComponent implements OnInit {
 
         this.authenticationService.isLoggedIn().subscribe(value => {
             this.isLoggedIn = value;
+        });
+
+        this.cartService.getProductsInCart().subscribe(products => {
+            this.productsInCart = products.length;
         });
 
         this.initializeApp();
