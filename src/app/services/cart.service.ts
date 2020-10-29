@@ -20,15 +20,10 @@ export class CartService {
 
         this.storage.get(this.cartKey).then(async products => {
             if (products !== null && products !== undefined && products.length > 0) {
-
                 this.cartProducts = await this.readProductsFromStorage();
-
-            } else {
-                console.log("cart service: no products stored");
             }
 
             this.notifySubscribers();
-
         });
     }
 
