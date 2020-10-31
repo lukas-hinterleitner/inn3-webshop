@@ -16,8 +16,7 @@ class ProductRepository
     $data = array();
     $sql = $this->conn->query("SELECT * FROM `t_products`");
     while ($row = $sql->fetch_assoc()) {
-      // $product = new Product($row['id'], $row['name'], $row['description'], $row['price'], $row['created']);
-      $data[] = $row;
+      $data[] = $this->prepareSimpleData($row);
     }
     return $data;
   }
@@ -32,10 +31,37 @@ class ProductRepository
     $data = $result->fetch_assoc();
     if ($data === null) {
       $data = array();
-      $data['error'] = "No product found with id '$id'";
-      $data['statusCode'] = "404";
+      $data['errorMsg'] = "No product found with id '$id'";
+      $data['errorCode'] = "404";
+      $data['error'] = true;
+      return $data;
     }
-    // $product = new Product($data['id'], $data['name'], $data['description'], $data['price'], $data['created']);
-    return $data;
+    return $this->prepareData($data);
+  }
+
+  private function prepareSimpleData($data)
+  {
+    $preparedData = array();
+    $preparedData['id'] = $data['id'];
+    $preparedData['name'] = $data['name'];
+    $preparedData['description'] = $data['description'];
+    $preparedData['price'] = $data['price'];
+    $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $preparedData['imgPath'] = "/images/" . $data['img_name'];
+    $preparedData['link'] = $actual_link . $data['id'];;
+    return $preparedData;
+  }
+
+  private function prepareData($data)
+  {
+    $preparedData = array();
+    $preparedData['id'] = $data['id'];
+    $preparedData['name'] = $data['name'];
+    $preparedData['description'] = $data['description'];
+    $preparedData['price'] = $data['price'];
+    $preparedData['imgPath'] = "/images/" . $data['img_name'];
+    $preparedData['amount'] = $data['amount'];
+    $preparedData['createdAt'] = $data['created'];
+    return $preparedData;
   }
 }
