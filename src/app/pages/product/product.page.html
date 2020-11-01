@@ -19,7 +19,16 @@
           <ion-card-title *ngIf="!productLoaded"><ion-skeleton-text animated="true" style="width: 100px; height: 20px;"></ion-skeleton-text></ion-card-title>
         </ion-col>
 
-        <ion-col size="*" class="ion-float-end">
+        <ion-col size="auto" class="ion-align-items-center">
+          <ion-item>
+            <ion-label>Amount:</ion-label>
+            <ion-select interface="popover" (ionChange)="quantity = $event.target.value" value="1">
+              <ion-select-option value="{{i + 1}}" *ngFor="let _ of amount; index as i">{{i + 1}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="*" class="ion-float-end ion-align-items-center">
           <ion-button (click)="addToCart()" class="ion-no-margin" fill="outline">
             <ion-icon slot="start" name="cart"></ion-icon>
             Add to cart
@@ -29,7 +38,7 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-card-subtitle *ngIf="productLoaded">{{product.getPrice() | currency:'EUR'}}</ion-card-subtitle>
+          <ion-card-subtitle color="warning" *ngIf="productLoaded">{{product.getPrice() | currency:'EUR'}}</ion-card-subtitle>
           <ion-card-subtitle *ngIf="!productLoaded"><ion-skeleton-text animated="true" style="width: 50px;"></ion-skeleton-text></ion-card-subtitle>
         </ion-col>
       </ion-row>
@@ -46,14 +55,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="auto">
-          <ion-item>
-            <ion-label>Amount:</ion-label>
-            <ion-select interface="popover" (ionChange)="quantity = $event.target.value" value="1">
-              <ion-select-option value="{{i + 1}}" *ngFor="let _ of amount; index as i">{{i + 1}}</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
+
       </ion-row>
     </ion-card-content>
   </ion-card>

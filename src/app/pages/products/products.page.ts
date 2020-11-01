@@ -4,20 +4,21 @@ import {ProductService} from '../../services/product.service';
 import {Product} from '../../objects/product';
 import {LoadingService} from '../../services/loading.service';
 
-import {Router} from '@angular/router';
-
 @Component({
     selector: 'app-products',
     templateUrl: './products.page.html',
     styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {
-    public products: Set<Product>;
+    public products: Product[];
+    public filteredProducts: Product[];
     public arr = Array(10);
     public productsLoaded: boolean;
 
-    constructor(private productService: ProductService, private loadingService: LoadingService, private router: Router) {
-        this.products = new Set<Product>();
+    constructor(private productService: ProductService, private loadingService: LoadingService) {
+        this.productsLoaded = false;
+        this.products = [];
+        this.filteredProducts = [];
     }
 
     async getBase64ImageFromUrl(imageUrl) {
@@ -38,13 +39,24 @@ export class ProductsPage implements OnInit {
     }
 
     async ngOnInit() {
-        await this.loadingService.showLoading(false);
+        await this.loadingService.showLoading();
 
-        await this.productService.getAllProducts().forEach(product => {
-            this.products.add(product);
-        });
-
+        this.products = this.productService.getAllProducts();
+        this.filteredProducts = this.products;
         this.productsLoaded = true;
+
+        await this.loadingService.closeLoading();
+    }
+
+    async handleInput(event) {
+        await this.loadingService.showLoading();
+
+        const query = event.target.value.toLowerCase();
+        requestAnimationFrame(() => {
+            this.filteredProducts = this.products.filter(product => {
+               return product.getTitle().toLowerCase().includes(query) || product.getDescription().toLowerCase().includes(query);
+            });
+        });
 
         await this.loadingService.closeLoading();
     }

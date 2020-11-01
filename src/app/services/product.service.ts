@@ -24,7 +24,7 @@ export class ProductService {
 
   getAllProducts() {
     // TODO get products from server
-    return this.products;
+    return Array.from(this.products.values());
   }
 
   getProductById(id: string) {

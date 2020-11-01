@@ -1,18 +1,18 @@
 <ion-header>
     <ion-toolbar>
-        <ion-row>
+        <ion-row class="ion-align-items-center">
             <ion-menu-button></ion-menu-button>
             <ion-title>Shopping Cart</ion-title>
             <ion-col *ngIf="products.length > 0">
-                <ion-button color="danger" shape="round" (click)="clearCart()" class="ion-float-end">
-                    Clear cart
+                <ion-button color="danger" size="small" shape="round" (click)="clearCart()" class="ion-float-end">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-no-padding">
 
     <div *ngIf="products.length === 0" id="container">
         <h2>Cart is empty!</h2>
@@ -46,8 +46,10 @@
                         </ion-col>
 
                         <ion-col class="ion-no-margin">
-                            <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)" class="ion-float-end">
-                                <ion-icon slot="start" name="close"></ion-icon>Remove
+                            <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)"
+                                        class="ion-float-end">
+                                <ion-icon slot="start" name="close"></ion-icon>
+                                Remove
                             </ion-button>
                         </ion-col>
                     </ion-row>
