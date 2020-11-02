@@ -29,7 +29,7 @@
                         <ion-col class="ion-margin-end" size="auto">
                             <ion-label>
                                 <h2>{{cartProduct.getProduct().getTitle()}}</h2>
-                                <h3>{{cartProduct.getProduct().getPrice() | currency: 'EUR'}}</h3>
+                                <h3><ion-text color="">{{cartProduct.getProduct().getPrice() | currency: 'EUR'}}</ion-text></h3>
                             </ion-label>
                         </ion-col>
 
@@ -56,12 +56,21 @@
                 </ion-grid>
             </ion-item>
         </ion-card>
+    </ng-container>
+</ion-content>
 
+<ion-footer>
+    <ion-toolbar class="ion-padding-bottom">
         <ion-row class="ion-justify-content-center">
-            <ion-button shape="round" expand="full">
+            <ion-item lines="none">
+                Total: {{totalPrice | currency: 'EUR'}}
+            </ion-item>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-button [disabled]="products.length === 0" (click)="openCheckout()" shape="round" expand="full">
                 <ion-icon slot="end" name="arrow-forward"></ion-icon>
                 Proceed to checkout
             </ion-button>
         </ion-row>
-    </ng-container>
-</ion-content>
+    </ion-toolbar>
+</ion-footer>

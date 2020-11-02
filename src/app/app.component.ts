@@ -9,14 +9,14 @@ import {LoadingService} from './services/loading.service';
 import {CartService} from './services/cart.service';
 import {DarkModeService} from './services/dark-mode.service';
 
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     public darkMode = false;
     public isLoggedIn = false;
     public productsInCart = 0;
@@ -68,7 +68,6 @@ export class AppComponent implements OnInit {
             url: '/user/address',
             icon: 'home'
         },
-
     ];
 
     constructor(
@@ -93,6 +92,12 @@ export class AppComponent implements OnInit {
             this.productsInCart = products.length;
         });
 
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.currentPath = (event as NavigationEnd).url;
+            }
+        });
+
         this.initializeApp();
     }
 
@@ -105,13 +110,6 @@ export class AppComponent implements OnInit {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });
-    }
-
-    ngOnInit() {
-        const path = window.location.pathname.split('/')[1];
-        if (path !== undefined) {
-            this.currentPath = '/' + path;
-        }
     }
 
     async logout() {

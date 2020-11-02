@@ -92,7 +92,6 @@ export class CartService {
 
     async removeAllProductsFromCart() {
         this.cartProducts.clear();
-        console.log(this.cartProducts);
         await this.updateProductsInCart();
     }
 

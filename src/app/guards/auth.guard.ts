@@ -13,6 +13,8 @@ export class AuthGuard implements CanActivate, CanLoad {
     private isLoggedIn = false;
 
     constructor(private authenticationService: AuthenticationService, private toastService: ToastService) {
+        this.authenticationService.checkAuthData().then(_ => _);
+
         this.authenticationService.isLoggedIn().subscribe(value => {
             this.isLoggedIn = value;
         });

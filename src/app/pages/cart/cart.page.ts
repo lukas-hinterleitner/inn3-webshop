@@ -2,8 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 import {LoadingService} from '../../services/loading.service';
 import {CartProduct} from '../../objects/cart-product';
-import {AlertController} from '@ionic/angular';
-import {NgZone} from '@angular/core';
+import {AlertController, ModalController} from '@ionic/angular';
+import {AuthenticationService} from '../../services/authentication.service';
+import {ToastService} from '../../services/toast.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-cart',
@@ -12,16 +14,28 @@ import {NgZone} from '@angular/core';
 })
 export class CartPage implements OnInit {
     public products: CartProduct[];
-    public amount = new Array(20);
+    public totalPrice: number;
+
+    public loggedIn: boolean;
+
+    public amount = new Array(20); // only needed for view
 
     constructor(private cartService: CartService, private loadingService: LoadingService, private alertController: AlertController,
-                private ngZone: NgZone) {
+                private authService: AuthenticationService, private toastService: ToastService, private router: Router) {
         this.products = [];
+        this.totalPrice = 0;
 
         this.cartService.getProductsInCart().subscribe(products => {
-            this.ngZone.run(_ => {
-                this.products = products;
+            this.products = products;
+
+            this.totalPrice = 0;
+            this.products.forEach(product => {
+                this.totalPrice = this.totalPrice + (product.getQuantity() * product.getProduct().getPrice());
             });
+        });
+
+        this.authService.isLoggedIn().subscribe(value => {
+            this.loggedIn = value;
         });
     }
 
@@ -69,6 +83,14 @@ export class CartPage implements OnInit {
         });
 
         await alert.present();
+    }
+
+    async openCheckout() {
+        if (this.loggedIn) {
+            await this.router.navigate(['/checkout']);
+        } else {
+            await this.toastService.showToast(2000, '', 'Log in to proceed to checkout!', 'danger');
+        }
     }
 
 }

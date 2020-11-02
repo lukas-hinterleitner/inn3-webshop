@@ -1,12 +1,195 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>Signup</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row>
+            <ion-menu-button></ion-menu-button>
+            <ion-title>Sign Up</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+    <form [formGroup]="signupForm" (ngSubmit)="signup()" [noValidate]="false">
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="12">
+                <ion-list-header lines="full">
+                    <h4>Name</h4>
+                </ion-list-header>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center ion-margin-bottom">
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">Firstname</ion-label>
+                    <ion-input name="firstname" formControlName="firstname"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.firstname">
+                        <div class="error-message" *ngIf="signupForm.get('firstname').hasError(validation.type) &&
+                                                          (signupForm.get('firstname').dirty || signupForm.get('firstname').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">Lastname</ion-label>
+                    <ion-input name="lastname" formControlName="lastname"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.lastname">
+                        <div class="error-message" *ngIf="signupForm.get('lastname').hasError(validation.type) &&
+                                                          (signupForm.get('lastname').dirty || signupForm.get('lastname').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
 
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="12">
+                <ion-list-header lines="full">
+                    <h4>Address</h4>
+                </ion-list-header>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">Country</ion-label>
+                    <ion-input name="country" formControlName="country"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.country">
+                        <div class="error-message" *ngIf="signupForm.get('country').hasError(validation.type) &&
+                                                          (signupForm.get('country').dirty || signupForm.get('country').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">City</ion-label>
+                    <ion-input name="city" formControlName="city"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.city">
+                        <div class="error-message" *ngIf="signupForm.get('city').hasError(validation.type) &&
+                                                          (signupForm.get('city').dirty || signupForm.get('city').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center ion-margin-bottom">
+            <ion-col size-lg="2" size-md="4" size-sm="4" size-xs="4">
+                <ion-item>
+                    <ion-label position="floating">ZIP</ion-label>
+                    <ion-input name="zip" formControlName="zip"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.zip">
+                        <div class="error-message" *ngIf="signupForm.get('zip').hasError(validation.type) &&
+                                                          (signupForm.get('zip').dirty || signupForm.get('zip').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="4" size-md="8" size-sm="8" size-xs="8">
+                <ion-item>
+                    <ion-label position="floating">Address</ion-label>
+                    <ion-input name="address" formControlName="address"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.address">
+                        <div class="error-message" *ngIf="signupForm.get('address').hasError(validation.type) &&
+                                                          (signupForm.get('address').dirty || signupForm.get('address').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="12">
+                <ion-list-header lines="full">
+                    <h4>Login Data</h4>
+                </ion-list-header>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="9">
+                <ion-item>
+                    <ion-label position="floating">Email</ion-label>
+                    <ion-input name="email" formControlName="email"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.email">
+                        <div class="error-message" *ngIf="signupForm.get('email').hasError(validation.type) &&
+                                                          (signupForm.get('email').dirty || signupForm.get('email').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="9">
+                <ion-item>
+                    <ion-label position="floating">Confirm Email</ion-label>
+                    <ion-input name="confirm_email" formControlName="confirm_email"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.confirm_email">
+                        <div class="error-message" *ngIf="signupForm.get('confirm_email').hasError(validation.type) &&
+                                                          (signupForm.get('confirm_email').dirty || signupForm.get('confirm_email').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center ion-margin-bottom">
+            <ion-col size-lg="3" size-md="9">
+                <ion-item>
+                    <ion-label position="floating">Password</ion-label>
+                    <ion-input name="password" formControlName="password" type="password"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.password">
+                        <div class="error-message" *ngIf="signupForm.get('password').hasError(validation.type) &&
+                                                          (signupForm.get('password').dirty || signupForm.get('password').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="3" size-md="9">
+                <ion-item>
+                    <ion-label position="floating">Confirm Password</ion-label>
+                    <ion-input name="confirm_password" formControlName="confirm_password" type="password"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.confirm_password">
+                        <div class="error-message" *ngIf="signupForm.get('confirm_password').hasError(validation.type) &&
+                                                          (signupForm.get('confirm_password').dirty || signupForm.get('confirm_password').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="9">
+                <ion-button shape="round" type="submit" expand="full" color="primary">Sign Up</ion-button>
+            </ion-col>
+        </ion-row>
+    </form>
 </ion-content>

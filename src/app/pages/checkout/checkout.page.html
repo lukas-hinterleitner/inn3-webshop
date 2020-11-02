@@ -1,12 +1,63 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>Checkout</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row class="ion-align-items-center">
+            <ion-back-button default-href="/cart"></ion-back-button>
+            <ion-title>Checkout</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="8">
+                <ion-card *ngFor="let product of products" class="ion-no-margin">
+                    <ion-card-header>
+                        <ion-card-title>{{product.getProduct().getTitle()}}</ion-card-title>
+                        <ion-card-subtitle>
+                            Price: {{product.getProduct().getPrice() | currency: 'EUR'}}</ion-card-subtitle>
+                        <ion-card-subtitle>Amount: {{product.getQuantity()}}</ion-card-subtitle>
+                    </ion-card-header>
+                </ion-card>
+            </ion-col>
+            <ion-col size="4">
+                <ion-card class="ion-no-margin">
+                    <ion-card-header>
+                        <ion-card-title>Total: {{totalPrice | currency: 'EUR'}}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p>
+                            Currently we cannot offer online payments. Through the button below you can send us as an
+                            inquiry for your products. If we receive your payment on the following bank account we will start
+                            the shipment of the ordered products.
+                        </p>
+                        <p>
+                            <strong>Bank Account</strong><br>
+                            Name: NFC Tags Company<br>
+                            IBAN: AT11 1111 1111 1111 1111
+                        </p>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar class="ion-padding-bottom">
+        <ion-row class="ion-justify-content-center">
+            <ion-item class="ion-text-center" lines="none">
+                <ion-text>I agree that my data is correct and will be saved on the server.</ion-text>
+                <ion-checkbox class="ion-margin-start" [(ngModel)]="agreement"></ion-checkbox>
+            </ion-item>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-button [disabled]="!agreement" (click)="sendInquiry()" shape="round" expand="full">
+                <ion-icon slot="end" name="send"></ion-icon>
+                Send inquiry
+            </ion-button>
+        </ion-row>
+    </ion-toolbar>
+</ion-footer>
+
