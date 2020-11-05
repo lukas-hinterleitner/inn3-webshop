@@ -1,12 +1,65 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>General</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row>
+            <ion-menu-button></ion-menu-button>
+            <ion-title>General</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <div id="container">
+        <form [formGroup]="generalForm" (ngSubmit)="updateGeneral()" [noValidate]="false">
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-lg="6" size-md="12">
+                    <ion-list-header lines="full">
+                        <h4>Name</h4>
+                    </ion-list-header>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-lg="6" size-md="9">
+                    <ion-item>
+                        <ion-label position="floating">Firstname</ion-label>
+                        <ion-input name="firstname" formControlName="firstname" type="text"></ion-input>
+                    </ion-item>
+                    <div class="validation-errors">
+                        <ng-container *ngFor="let validation of validation_messages.firstname">
+                            <div class="error-message" *ngIf="generalForm.get('firstname').hasError(validation.type) &&
+                                                          (generalForm.get('firstname').dirty || generalForm.get('firstname').touched)">
+                                {{ validation.message }}
+                            </div>
+                        </ng-container>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-justify-content-center ion-margin-bottom">
+                <ion-col size-lg="6" size-md="9">
+                    <ion-item>
+                        <ion-label position="floating">Lastname</ion-label>
+                        <ion-input name="lastname" formControlName="lastname" type="text"></ion-input>
+                    </ion-item>
+                    <div class="validation-errors">
+                        <ng-container *ngFor="let validation of validation_messages.lastname">
+                            <div class="error-message" *ngIf="generalForm.get('lastname').hasError(validation.type) &&
+                                                          (generalForm.get('lastname').dirty || generalForm.get('lastname').touched)">
+                                {{ validation.message }}
+                            </div>
+                        </ng-container>
+                    </div>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-justify-content-center">
+                <ion-col size-lg="6" size-md="9">
+                    <ion-button shape="round" type="submit" expand="full" color="primary">
+                        <ion-icon slot="start" name="reload"></ion-icon>
+                        Update
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </form>
+    </div>
 
 </ion-content>

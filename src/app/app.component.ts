@@ -59,14 +59,19 @@ export class AppComponent {
             icon: 'person'
         },
         {
-            title: 'Payment',
-            url: '/user/payment',
-            icon: 'card'
-        },
-        {
             title: 'Address',
             url: '/user/address',
             icon: 'home'
+        },
+        {
+            title: 'Password',
+            url: '/user/password',
+            icon: 'lock-open'
+        },
+        {
+            title: 'Payment',
+            url: '/user/payment',
+            icon: 'card'
         },
     ];
 

@@ -60,6 +60,10 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
+    {
+        path: 'user/password',
+        loadChildren: () => import('./pages/user/password/password.module').then(m => m.PasswordPageModule)
+    },
 ];
 
 @NgModule({

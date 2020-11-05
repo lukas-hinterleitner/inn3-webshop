@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UserData} from '../../objects/user-data';
 
 @Component({
     selector: 'app-signup',
@@ -35,7 +36,7 @@ export class SignupPage implements OnInit {
         zip: [
             {type: 'required', message: 'ZIP Code is required.'},
             {type: 'minlength', message: 'Must have at least 3 characters.'},
-            {type: 'maxlength', message: 'Maximum 255 characters.'},
+            {type: 'maxlength', message: 'Maximum 12 characters.'},
         ],
         address: [
             {type: 'required', message: 'Address is required.'},
@@ -133,6 +134,21 @@ export class SignupPage implements OnInit {
 
     signup() {
         this.signupForm.markAllAsTouched();
+
+        const user = {
+            _firstname: this.signupForm.get('firstname').value,
+            _lastname: this.signupForm.get('lastname').value,
+            _country : this.signupForm.get('country').value,
+            _city : this.signupForm.get('city').value,
+            _zip : this.signupForm.get('zip').value,
+            _address : this.signupForm.get('address').value,
+            _email : this.signupForm.get('email').value,
+            _password : this.signupForm.get('password').value,
+        };
+
+        console.log(user);
+
+        // TODO send user data to server
     }
 
 }

@@ -6,6 +6,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {LoadingService} from '../../services/loading.service';
 
+import {CryptoService} from '../../services/crypto.service';
+import {UserData} from '../../objects/user-data';
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.page.html',
@@ -20,7 +23,8 @@ export class LoginPage implements OnInit {
             { type: 'email', message: 'Wrong email format.' },
         ],
         password: [
-            { type: 'required', message: 'Password is required.' }
+            { type: 'required', message: 'Password is required.' },
+            { type: 'minlength', message: 'Password must have minimum 8 characters'},
         ],
     };
 
@@ -39,21 +43,24 @@ export class LoginPage implements OnInit {
         });
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     async login() {
         await this.loadingService.showLoading();
 
         if (this.loginForm.valid) {
-            const email = this.loginForm.get('email').value;
-            const password = this.loginForm.get('password').value;
+            const email: string = this.loginForm.get('email').value;
+            const password: string = CryptoService.hashSHA512(this.loginForm.get('password').value);
 
             // TODO encryption
-            // TODO password hashing
             // TODO get userdata from server
+            // without password
 
-            await this.authenticationService.login(email);
+            // improvised userdata
+            const userData = {_firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
+                                    _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: 'maxi1234'};
+
+            await this.authenticationService.login(userData);
             await this.router.navigate(['/user/general']);
         } else {
             // TODO view error messages
