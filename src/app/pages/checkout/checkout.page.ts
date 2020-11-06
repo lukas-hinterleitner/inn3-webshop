@@ -5,6 +5,9 @@ import {ToastService} from '../../services/toast.service';
 import {AlertController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {LoadingService} from '../../services/loading.service';
+import {AuthenticationService} from '../../services/authentication.service';
+import {UserData} from '../../objects/user-data';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-checkout',
@@ -12,17 +15,18 @@ import {LoadingService} from '../../services/loading.service';
     styleUrls: ['./checkout.page.scss'],
 })
 export class CheckoutPage implements OnInit {
+    public user: UserData;
+
     public products: CartProduct[];
     public totalPrice: number;
 
     public agreement: boolean;
 
     constructor(private cartService: CartService, private alertController: AlertController, private toastService: ToastService,
-                private router: Router, private loadingService: LoadingService) {
+                private router: Router, private loadingService: LoadingService, private authService: AuthenticationService) {
         this.products = [];
-        this.totalPrice = 0;
 
-        this.cartService.getProductsInCart().subscribe(products => {
+        this.cartService.getProductsInCart().pipe(take(1)).subscribe(products => {
             this.products = products;
 
             this.totalPrice = 0;
@@ -30,10 +34,13 @@ export class CheckoutPage implements OnInit {
                 this.totalPrice = this.totalPrice + (product.getQuantity() * product.getProduct().getPrice());
             });
         });
+
+        this.authService.getUser().pipe(take(1)).subscribe(user => {
+            this.user = user;
+        });
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     async sendInquiry() {
         const alert = await this.alertController.create({
@@ -47,6 +54,8 @@ export class CheckoutPage implements OnInit {
                     text: 'Send',
                     handler: async () => {
                         await this.loadingService.showLoading();
+
+                        // TODO send inquiry
 
                         await this.cartService.removeAllProductsFromCart();
                         await this.router.navigate(['/products']);
@@ -62,6 +71,4 @@ export class CheckoutPage implements OnInit {
 
         await alert.present();
     }
-
-
 }

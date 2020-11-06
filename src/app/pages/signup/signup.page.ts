@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserData} from '../../objects/user-data';
+import {LoadingService} from '../../services/loading.service';
+import {ToastService} from '../../services/toast.service';
 
 @Component({
     selector: 'app-signup',
@@ -9,6 +11,7 @@ import {UserData} from '../../objects/user-data';
 })
 export class SignupPage implements OnInit {
     public signupForm: FormGroup;
+    public formValid: boolean;
 
     public validation_messages = {
         // name
@@ -66,7 +69,7 @@ export class SignupPage implements OnInit {
         ],
     };
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService) {
         // create form group
         this.signupForm = this.formBuilder.group({
             // name
@@ -127,28 +130,37 @@ export class SignupPage implements OnInit {
                 ConfirmedValidator('password', 'confirm_password'),
             ]
         });
+
+        this.signupForm.valueChanges.subscribe(() => {
+            this.formValid = this.signupForm.valid;
+        });
     }
 
     ngOnInit() {
     }
 
-    signup() {
+    async signup() {
         this.signupForm.markAllAsTouched();
 
-        const user = {
-            _firstname: this.signupForm.get('firstname').value,
-            _lastname: this.signupForm.get('lastname').value,
-            _country : this.signupForm.get('country').value,
-            _city : this.signupForm.get('city').value,
-            _zip : this.signupForm.get('zip').value,
-            _address : this.signupForm.get('address').value,
-            _email : this.signupForm.get('email').value,
-            _password : this.signupForm.get('password').value,
-        };
+        if (this.signupForm.valid) {
+            await this.loadingService.showLoading();
 
-        console.log(user);
+            const user = {
+                _firstname: this.signupForm.get('firstname').value,
+                _lastname: this.signupForm.get('lastname').value,
+                _country : this.signupForm.get('country').value,
+                _city : this.signupForm.get('city').value,
+                _zip : this.signupForm.get('zip').value,
+                _address : this.signupForm.get('address').value,
+                _email : this.signupForm.get('email').value,
+                _password : this.signupForm.get('password').value,
+            } as UserData;
 
-        // TODO send user data to server
+            // TODO send user data to server
+
+            await this.loadingService.closeLoading();
+            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+        }
     }
 
 }
@@ -157,7 +169,7 @@ export function ConfirmedValidator(controlName: string, matchingControlName: str
     return (formGroup: FormGroup) => {
         const control = formGroup.controls[controlName];
         const matchingControl = formGroup.controls[matchingControlName];
-        if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+        if (matchingControl.errors && !matchingControl.errors.confirmed) {
             return;
         }
 

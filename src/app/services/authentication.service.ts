@@ -11,11 +11,11 @@ export class AuthenticationService {
     private HAS_LOGGED_IN = 'hasLoggedIn';
     private USER_DATA = 'USER_DATA';
 
-    private loggedIn = new BehaviorSubject(false);
+    private loggedIn = new ReplaySubject<boolean>(1);
     private user = new ReplaySubject<UserData>(1); // set buffer size to 1, so the last ONE update will be cached
 
     constructor(private storage: Storage) {
-        this.checkAuthData().then(_ => {});
+        this.checkAuthData().then(() => {});
     }
 
     async checkAuthData() {

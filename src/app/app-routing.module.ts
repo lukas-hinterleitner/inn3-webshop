@@ -62,7 +62,9 @@ const routes: Routes = [
     },
     {
         path: 'user/password',
-        loadChildren: () => import('./pages/user/password/password.module').then(m => m.PasswordPageModule)
+        loadChildren: () => import('./pages/user/password/password.module').then(m => m.PasswordPageModule),
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
     },
 ];
 

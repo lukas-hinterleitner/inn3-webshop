@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <form [formGroup]="signupForm" (ngSubmit)="signup()" [noValidate]="false">
+    <form class="" id="container" [formGroup]="signupForm" (ngSubmit)="signup()" [noValidate]="false">
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="12">
                 <ion-list-header lines="full">
@@ -188,7 +188,10 @@
 
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="9">
-                <ion-button shape="round" type="submit" expand="full" color="primary">Sign Up</ion-button>
+                <ion-button [disabled]="!formValid" shape="round" type="submit" expand="full" color="primary">
+                    <ion-icon slot="start" name="log-in"></ion-icon>
+                    Sign Up
+                </ion-button>
             </ion-col>
         </ion-row>
     </form>

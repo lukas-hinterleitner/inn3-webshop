@@ -7,7 +7,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoadingService} from '../../services/loading.service';
 
 import {CryptoService} from '../../services/crypto.service';
-import {UserData} from '../../objects/user-data';
 
 @Component({
     selector: 'app-login',
@@ -16,15 +15,16 @@ import {UserData} from '../../objects/user-data';
 })
 export class LoginPage implements OnInit {
     public loginForm: FormGroup;
+    public formValid: boolean;
 
     public validation_messages = {
         email: [
-            { type: 'required', message: 'Email is required.' },
-            { type: 'email', message: 'Wrong email format.' },
+            {type: 'required', message: 'Email is required.'},
+            {type: 'email', message: 'Wrong email format.'},
         ],
         password: [
-            { type: 'required', message: 'Password is required.' },
-            { type: 'minlength', message: 'Password must have minimum 8 characters'},
+            {type: 'required', message: 'Password is required.'},
+            {type: 'minlength', message: 'Password must have minimum 8 characters'},
         ],
     };
 
@@ -33,17 +33,22 @@ export class LoginPage implements OnInit {
         // create form group
         this.loginForm = this.formBuilder.group({
             email: ['', Validators.compose([
-                                                        Validators.required,
-                                                        Validators.email,
-                                                    ])],
+                Validators.required,
+                Validators.email,
+            ])],
             password: ['', Validators.compose([
-                                                        Validators.minLength(8),
-                                                        Validators.required,
-                                                    ])]
+                Validators.minLength(8),
+                Validators.required,
+            ])]
+        });
+
+        this.loginForm.valueChanges.subscribe(() => {
+            this.formValid = this.loginForm.valid;
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     async login() {
         await this.loadingService.showLoading();
@@ -57,8 +62,10 @@ export class LoginPage implements OnInit {
             // without password
 
             // improvised userdata
-            const userData = {_firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
-                                    _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: 'maxi1234'};
+            const userData = {
+                _firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
+                _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: CryptoService.hashSHA512('maxi1234')
+            };
 
             await this.authenticationService.login(userData);
             await this.router.navigate(['/user/general']);

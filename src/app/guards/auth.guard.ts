@@ -10,25 +10,21 @@ import {ToastService} from '../services/toast.service';
     providedIn: 'root'
 })
 export class AuthGuard implements CanActivate, CanLoad {
-    private isLoggedIn = false;
+    private isLoggedIn: boolean;
 
-    constructor(private authenticationService: AuthenticationService, private toastService: ToastService) {
-        this.authenticationService.isLoggedIn().subscribe(value => {
-            this.isLoggedIn = value;
-        });
-    }
+    constructor(private authenticationService: AuthenticationService, private toastService: ToastService) {}
 
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-        return this.isLoggedIn;
+        return this.authenticationService.isLoggedIn();
     }
 
     canLoad(
         route: Route,
         segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
 
-        return this.isLoggedIn;
+        return this.authenticationService.isLoggedIn();
     }
 }

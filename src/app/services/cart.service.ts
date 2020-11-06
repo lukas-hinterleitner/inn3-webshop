@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {CartProduct} from '../objects/cart-product';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, ReplaySubject} from 'rxjs';
 import {Product} from '../objects/product';
 import {ToastService} from './toast.service';
 
@@ -10,12 +10,12 @@ import {ToastService} from './toast.service';
 })
 export class CartService {
     private cartProducts: Map<string, CartProduct>;
-    private readonly productsSubject: BehaviorSubject<CartProduct[]>;
+    private readonly productsSubject: ReplaySubject<CartProduct[]>;
 
     private readonly cartKey = 'PRODUCTS_IN_CART';
 
     constructor(private storage: Storage, private toastService: ToastService) {
-        this.productsSubject = new BehaviorSubject<CartProduct[]>([]);
+        this.productsSubject = new ReplaySubject<CartProduct[]>(1);
         this.cartProducts = new Map<string, CartProduct>();
 
         this.storage.get(this.cartKey).then(async products => {

@@ -3,6 +3,8 @@ import {AuthenticationService} from '../../../services/authentication.service';
 import {UserData} from '../../../objects/user-data';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {take} from 'rxjs/operators';
+import {LoadingService} from '../../../services/loading.service';
+import {ToastService} from '../../../services/toast.service';
 
 @Component({
     selector: 'app-general',
@@ -13,6 +15,7 @@ export class GeneralPage implements OnInit {
     private user: UserData;
 
     public generalForm: FormGroup;
+    public formValid = true;
 
     public validation_messages = {
         // name
@@ -28,7 +31,8 @@ export class GeneralPage implements OnInit {
         ],
     };
 
-    constructor(private authService: AuthenticationService, private formBuilder: FormBuilder) {
+    constructor(private authService: AuthenticationService, private formBuilder: FormBuilder, private loadingService: LoadingService,
+                private toastService: ToastService) {
         // create form group
         this.generalForm = this.formBuilder.group({
             // name
@@ -49,8 +53,10 @@ export class GeneralPage implements OnInit {
 
             this.generalForm.get('firstname').setValue(this.user._firstname);
             this.generalForm.get('lastname').setValue(this.user._lastname);
+        });
 
-            console.log(this.user);
+        this.generalForm.valueChanges.subscribe(() => {
+            this.formValid = this.generalForm.valid;
         });
     }
 
@@ -59,13 +65,20 @@ export class GeneralPage implements OnInit {
     async updateGeneral() {
         this.generalForm.markAllAsTouched();
 
-        // TODO send update request to server
+        if (this.generalForm.valid) {
+            await this.loadingService.showLoading();
 
-        this.user._firstname = this.generalForm.get('firstname').value;
-        this.user._lastname = this.generalForm.get('lastname').value;
+            // TODO send update request to server
 
-        console.log(this.user);
+            this.user._firstname = this.generalForm.get('firstname').value;
+            this.user._lastname = this.generalForm.get('lastname').value;
 
-        await this.authService.updateUser(this.user);
+            console.log(this.user);
+
+            await this.authService.updateUser(this.user);
+
+            await this.loadingService.closeLoading();
+            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+        }
     }
 }

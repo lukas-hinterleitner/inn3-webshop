@@ -7,8 +7,8 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <div id="container">
+<ion-content class="ion-padding">
+    <div id="container" class="ion-padding">
         <form [formGroup]="generalForm" (ngSubmit)="updateGeneral()" [noValidate]="false">
             <ion-row class="ion-justify-content-center">
                 <ion-col size-lg="6" size-md="12">
@@ -53,7 +53,7 @@
 
             <ion-row class="ion-justify-content-center">
                 <ion-col size-lg="6" size-md="9">
-                    <ion-button shape="round" type="submit" expand="full" color="primary">
+                    <ion-button [disabled]="!formValid" shape="round" type="submit" expand="full" color="primary">
                         <ion-icon slot="start" name="reload"></ion-icon>
                         Update
                     </ion-button>

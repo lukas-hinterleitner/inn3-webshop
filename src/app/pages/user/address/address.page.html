@@ -1,12 +1,89 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-row>
-      <ion-menu-button></ion-menu-button>
-      <ion-title>Address</ion-title>
-    </ion-row>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-row>
+            <ion-menu-button></ion-menu-button>
+            <ion-title>Address</ion-title>
+        </ion-row>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+    <form id="container" class="ion-padding" [formGroup]="addressForm" (ngSubmit)="updateAddress()" [noValidate]="false">
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="12">
+                <ion-list-header lines="full">
+                    <h4>Address</h4>
+                </ion-list-header>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">Country</ion-label>
+                    <ion-input name="country" formControlName="country"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.country">
+                        <div class="error-message" *ngIf="addressForm.get('country').hasError(validation.type) &&
+                                                          (addressForm.get('country').dirty || addressForm.get('country').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="3" size-md="6">
+                <ion-item>
+                    <ion-label position="floating">City</ion-label>
+                    <ion-input name="city" formControlName="city"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.city">
+                        <div class="error-message" *ngIf="addressForm.get('city').hasError(validation.type) &&
+                                                          (addressForm.get('city').dirty || addressForm.get('city').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center ion-margin-bottom">
+            <ion-col size-lg="2" size-md="4" size-sm="4" size-xs="4">
+                <ion-item>
+                    <ion-label position="floating">ZIP</ion-label>
+                    <ion-input name="zip" formControlName="zip"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.zip">
+                        <div class="error-message" *ngIf="addressForm.get('zip').hasError(validation.type) &&
+                                                          (addressForm.get('zip').dirty || addressForm.get('zip').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+            <ion-col size-lg="4" size-md="8" size-sm="8" size-xs="8">
+                <ion-item>
+                    <ion-label position="floating">Address</ion-label>
+                    <ion-input name="address" formControlName="address"></ion-input>
+                </ion-item>
+                <div class="validation-errors">
+                    <ng-container *ngFor="let validation of validation_messages.address">
+                        <div class="error-message" *ngIf="addressForm.get('address').hasError(validation.type) &&
+                                                          (addressForm.get('address').dirty || addressForm.get('address').touched)">
+                            {{ validation.message }}
+                        </div>
+                    </ng-container>
+                </div>
+            </ion-col>
+        </ion-row>
 
+        <ion-row class="ion-justify-content-center">
+            <ion-col size-lg="6" size-md="9">
+                <ion-button [disabled]="!formValid" shape="round" type="submit" expand="full" color="primary">
+                    <ion-icon slot="start" name="reload"></ion-icon>
+                    Update
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </form>
 </ion-content>
