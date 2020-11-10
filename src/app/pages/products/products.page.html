@@ -1,18 +1,16 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar [color]="headerColor">
         <ion-row>
             <ion-menu-button></ion-menu-button>
             <ion-title>Products</ion-title>
         </ion-row>
     </ion-toolbar>
-    <ion-toolbar>
-        <ion-row>
-            <ion-searchbar (ionChange)="handleInput($event)" show-cancel-button="focus" cancel-button-icon="close"></ion-searchbar>
-        </ion-row>
-    </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-justify-content-center">
+    <ion-row>
+        <ion-searchbar (ionChange)="handleInput($event)" show-cancel-button="focus" cancel-button-icon="close"></ion-searchbar>
+    </ion-row>
 
     <ion-row *ngIf="!productsLoaded">
         <ion-col size-md="3" size-sm="6" size-xs="12" *ngFor="let item of arr;">

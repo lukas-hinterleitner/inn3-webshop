@@ -4,17 +4,20 @@ import {ConfirmedValidator} from '../../signup/signup.page';
 import {LoadingService} from '../../../services/loading.service';
 import {ToastService} from '../../../services/toast.service';
 import {UserData} from '../../../objects/user-data';
-import {take} from 'rxjs/operators';
 import {AuthenticationService} from '../../../services/authentication.service';
 import {CryptoService} from '../../../services/crypto.service';
+import {UnsubscribeOnDestroyAdapter} from '../../../utilities/unsubscribe-on-destroy-adapter';
+import {DarkModeService} from '../../../services/dark-mode.service';
 
 @Component({
     selector: 'app-password',
     templateUrl: './password.page.html',
     styleUrls: ['./password.page.scss'],
 })
-export class PasswordPage implements OnInit {
+export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     private user: UserData;
+
+    public headerColor: string;
 
     public passwordForm: FormGroup;
     public formValid: boolean;
@@ -40,11 +43,16 @@ export class PasswordPage implements OnInit {
     };
 
     constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService,
-                private authService: AuthenticationService) {
+                private authService: AuthenticationService, private darkModeService: DarkModeService) {
+        super();
 
-        this.authService.getUser().pipe(take(1)).subscribe(user => {
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
+
+        this.subscriptions.add(this.authService.getUser().subscribe(user => {
             this.user = user;
-        });
+        }));
 
         // create form group
         this.passwordForm = this.formBuilder.group({
@@ -71,9 +79,9 @@ export class PasswordPage implements OnInit {
             ]
         });
 
-        this.passwordForm.valueChanges.subscribe(() => {
+        this.subscriptions.add(this.passwordForm.valueChanges.subscribe(() => {
             this.formValid = this.passwordForm.valid;
-        });
+        }));
     }
 
     private PasswordValidator(controlName: string) {

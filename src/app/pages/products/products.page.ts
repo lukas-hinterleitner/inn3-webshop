@@ -3,22 +3,32 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../../services/product.service';
 import {Product} from '../../objects/product';
 import {LoadingService} from '../../services/loading.service';
+import {DarkModeService} from '../../services/dark-mode.service';
+import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 
 @Component({
     selector: 'app-products',
     templateUrl: './products.page.html',
     styleUrls: ['./products.page.scss'],
 })
-export class ProductsPage implements OnInit {
+export class ProductsPage extends UnsubscribeOnDestroyAdapter implements OnInit {
+    public headerColor: string;
+
     public products: Product[];
     public filteredProducts: Product[];
     public arr = Array(10);
     public productsLoaded: boolean;
 
-    constructor(private productService: ProductService, private loadingService: LoadingService) {
+    constructor(private productService: ProductService, private loadingService: LoadingService, private darkModeService : DarkModeService) {
+        super();
+
         this.productsLoaded = false;
         this.products = [];
         this.filteredProducts = [];
+
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
     }
 
     async getBase64ImageFromUrl(imageUrl) {

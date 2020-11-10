@@ -7,14 +7,15 @@ import {Router} from '@angular/router';
 import {LoadingService} from '../../services/loading.service';
 import {AuthenticationService} from '../../services/authentication.service';
 import {UserData} from '../../objects/user-data';
-import {take} from 'rxjs/operators';
+import {DarkModeService} from '../../services/dark-mode.service';
+import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 
 @Component({
     selector: 'app-checkout',
     templateUrl: './checkout.page.html',
     styleUrls: ['./checkout.page.scss'],
 })
-export class CheckoutPage implements OnInit {
+export class CheckoutPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     public user: UserData;
 
     public products: CartProduct[];
@@ -22,22 +23,31 @@ export class CheckoutPage implements OnInit {
 
     public agreement: boolean;
 
+    public headerColor: string;
+
     constructor(private cartService: CartService, private alertController: AlertController, private toastService: ToastService,
-                private router: Router, private loadingService: LoadingService, private authService: AuthenticationService) {
+                private router: Router, private loadingService: LoadingService, private authService: AuthenticationService,
+                private darkModeService: DarkModeService) {
+        super();
+
         this.products = [];
 
-        this.cartService.getProductsInCart().pipe(take(1)).subscribe(products => {
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
+
+        this.subscriptions.add(this.cartService.getProductsInCart().subscribe(products => {
             this.products = products;
 
             this.totalPrice = 0;
             this.products.forEach(product => {
                 this.totalPrice = this.totalPrice + (product.getQuantity() * product.getProduct().getPrice());
             });
-        });
+        }));
 
-        this.authService.getUser().pipe(take(1)).subscribe(user => {
+        this.subscriptions.add(this.authService.getUser().subscribe(user => {
             this.user = user;
-        });
+        }));
     }
 
     ngOnInit() {}

@@ -7,13 +7,17 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoadingService} from '../../services/loading.service';
 
 import {CryptoService} from '../../services/crypto.service';
+import {DarkModeService} from '../../services/dark-mode.service';
+import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.page.html',
     styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
+    public headerColor: string;
+
     public loginForm: FormGroup;
     public formValid: boolean;
 
@@ -29,7 +33,13 @@ export class LoginPage implements OnInit {
     };
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private formBuilder: FormBuilder,
-                private loadingService: LoadingService) {
+                private loadingService: LoadingService, private darkModeService: DarkModeService) {
+        super();
+
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
+
         // create form group
         this.loginForm = this.formBuilder.group({
             email: ['', Validators.compose([
@@ -42,9 +52,9 @@ export class LoginPage implements OnInit {
             ])]
         });
 
-        this.loginForm.valueChanges.subscribe(() => {
+        this.subscriptions.add(this.loginForm.valueChanges.subscribe(() => {
             this.formValid = this.loginForm.valid;
-        });
+        }));
     }
 
     ngOnInit() {

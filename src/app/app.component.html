@@ -1,12 +1,17 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
+      <ion-header>
+        <ion-toolbar [color]="headerColor">
+          <ion-title>
+            NFC Webshop
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
       <ion-content>
 
         <ion-list class="main-menu">
-          <ion-list-header>NFC Webshop</ion-list-header>
-          <ion-note>Innovation Lab 3</ion-note>
-
+          <ion-note>Navigation</ion-note>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item (click)="currentPath = p.url" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="p.url == currentPath">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>

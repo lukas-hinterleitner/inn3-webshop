@@ -1,18 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../../services/authentication.service';
-import {take} from 'rxjs/operators';
 import {UserData} from '../../../objects/user-data';
 import {LoadingService} from '../../../services/loading.service';
 import {ToastService} from '../../../services/toast.service';
+import {UnsubscribeOnDestroyAdapter} from '../../../utilities/unsubscribe-on-destroy-adapter';
+import {DarkModeService} from '../../../services/dark-mode.service';
 
 @Component({
     selector: 'app-address',
     templateUrl: './address.page.html',
     styleUrls: ['./address.page.scss'],
 })
-export class AddressPage implements OnInit {
+export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     private user: UserData;
+
+    public headerColor: string;
 
     public addressForm: FormGroup;
     public formValid = true;
@@ -41,7 +44,9 @@ export class AddressPage implements OnInit {
     };
 
     constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private loadingService: LoadingService,
-                private toastService: ToastService) {
+                private toastService: ToastService, private darkModeService: DarkModeService) {
+        super();
+
         // create form group
         this.addressForm = this.formBuilder.group({
             // address
@@ -67,18 +72,22 @@ export class AddressPage implements OnInit {
             ])],
         });
 
-        this.authService.getUser().pipe(take(1)).subscribe(user => {
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
+
+        this.subscriptions.add(this.authService.getUser().subscribe(user => {
             this.user = user;
 
             this.addressForm.get('country').setValue(this.user._country);
             this.addressForm.get('city').setValue(this.user._city);
             this.addressForm.get('zip').setValue(this.user._zip);
             this.addressForm.get('address').setValue(this.user._address);
-        });
+        }));
 
-        this.addressForm.valueChanges.subscribe(() => {
+        this.subscriptions.add(this.addressForm.valueChanges.subscribe(() => {
             this.formValid = this.addressForm.valid;
-        });
+        }));
     }
 
     ngOnInit() {}

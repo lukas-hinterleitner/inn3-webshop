@@ -3,13 +3,17 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserData} from '../../objects/user-data';
 import {LoadingService} from '../../services/loading.service';
 import {ToastService} from '../../services/toast.service';
+import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
+import {DarkModeService} from '../../services/dark-mode.service';
 
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.page.html',
     styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage extends UnsubscribeOnDestroyAdapter implements OnInit {
+    public headerColor: string;
+
     public signupForm: FormGroup;
     public formValid: boolean;
 
@@ -69,7 +73,10 @@ export class SignupPage implements OnInit {
         ],
     };
 
-    constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService) {
+    constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService,
+                private darkModeService: DarkModeService) {
+        super();
+
         // create form group
         this.signupForm = this.formBuilder.group({
             // name
@@ -131,9 +138,13 @@ export class SignupPage implements OnInit {
             ]
         });
 
-        this.signupForm.valueChanges.subscribe(() => {
+        this.subscriptions.add(this.signupForm.valueChanges.subscribe(() => {
             this.formValid = this.signupForm.valid;
-        });
+        }));
+
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
     }
 
     ngOnInit() {

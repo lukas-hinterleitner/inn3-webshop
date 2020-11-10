@@ -6,13 +6,15 @@ import {AlertController, ModalController} from '@ionic/angular';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ToastService} from '../../services/toast.service';
 import {Router} from '@angular/router';
+import {DarkModeService} from '../../services/dark-mode.service';
+import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 
 @Component({
     selector: 'app-cart',
     templateUrl: './cart.page.html',
     styleUrls: ['./cart.page.scss'],
 })
-export class CartPage implements OnInit {
+export class CartPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     public products: CartProduct[];
     public totalPrice: number;
 
@@ -20,19 +22,28 @@ export class CartPage implements OnInit {
 
     public amount = new Array(20); // only needed for view
 
+    public headerColor: string;
+
     constructor(private cartService: CartService, private loadingService: LoadingService, private alertController: AlertController,
-                private authService: AuthenticationService, private toastService: ToastService, private router: Router) {
+                private authService: AuthenticationService, private toastService: ToastService, private router: Router,
+                private darkModeService: DarkModeService) {
+        super();
+
         this.products = [];
         this.totalPrice = 0;
 
-        this.cartService.getProductsInCart().subscribe(products => {
+        this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
+            this.headerColor = headerColor;
+        }));
+
+        this.subscriptions.add(this.cartService.getProductsInCart().subscribe(products => {
             this.products = products;
 
             this.totalPrice = 0;
             this.products.forEach(product => {
                 this.totalPrice = this.totalPrice + (product.getQuantity() * product.getProduct().getPrice());
             });
-        });
+        }));
 
         this.authService.isLoggedIn().subscribe(value => {
             this.loggedIn = value;
