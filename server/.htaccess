@@ -2,3 +2,6 @@ RewriteEngine ON
 RewriteRule ^api/products/?$ api/products/product_handler.php
 RewriteRule ^api/products/([0-9]+)?$ api/products/product_handler.php?id=$1
 RewriteRule ^api/get-product/([a-zA-Z0-9]+)?$ api/products/product_handler.php?internCode=$1
+
+RewriteRule ^api/login/?$ api/auth/login.php
+RewriteRule ^api/register/?$ api/auth/register.php
