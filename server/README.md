@@ -12,7 +12,7 @@ To start the web service, you should use Apache server to run it.
 | POST | /login                   | API for login existing user                   |
 | POST | /register                | API for registration of existing user         |
 
-#### Login example:
+#### Login example body params:
 ```json
 {
     "pwd": "MyPass1234",
@@ -20,7 +20,7 @@ To start the web service, you should use Apache server to run it.
 }
 ```
 
-#### Registration example:
+#### Registration example body params:
 ```json
 {
     "firstname": "Stefan",
