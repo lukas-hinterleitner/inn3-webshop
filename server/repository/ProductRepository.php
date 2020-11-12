@@ -30,11 +30,21 @@ class ProductRepository
     $result = $stmt->get_result();
     $data = $result->fetch_assoc();
     if ($data === null) {
-      $data = array();
-      $data['errorMsg'] = "No product found with id '$id'";
-      $data['errorCode'] = "404";
-      $data['error'] = true;
-      return $data;
+      return null;
+    }
+    return $this->prepareData($data);
+  }
+
+  public function getProductByInternCode($gInternCode)
+  {
+    $internCode = $this->conn->real_escape_string($gInternCode);
+    $stmt = $this->conn->prepare("SELECT * FROM `t_products` WHERE intern_article_code=?");
+    $stmt->bind_param("s", $internCode);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+    if ($data === null) {
+      return null;
     }
     return $this->prepareData($data);
   }
@@ -42,10 +52,10 @@ class ProductRepository
   private function prepareSimpleData($data)
   {
     $preparedData = array();
-    $preparedData['id'] = $data['id'];
+    $preparedData['id'] = intval($data['id']);
     $preparedData['name'] = $data['name'];
     $preparedData['description'] = $data['description'];
-    $preparedData['price'] = $data['price'];
+    $preparedData['price'] = doubleval($data['price']);
     $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $preparedData['imgPath'] = "/images/" . $data['img_name'];
     $preparedData['link'] = $actual_link . $data['id'];;
@@ -55,12 +65,13 @@ class ProductRepository
   private function prepareData($data)
   {
     $preparedData = array();
-    $preparedData['id'] = $data['id'];
+    $preparedData['id'] = intval($data['id']);
     $preparedData['name'] = $data['name'];
     $preparedData['description'] = $data['description'];
-    $preparedData['price'] = $data['price'];
+    $preparedData['price'] = doubleval($data['price']);
+    $preparedData['internArticleCode'] = $data['intern_article_code'];
     $preparedData['imgPath'] = "/images/" . $data['img_name'];
-    $preparedData['amount'] = $data['amount'];
+    $preparedData['amount'] = intval($data['amount']);
     $preparedData['createdAt'] = $data['created'];
     return $preparedData;
   }
