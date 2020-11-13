@@ -11,6 +11,7 @@ To start the web service, you should use Apache server to run it.
 | GET  | /get-product/:internCode | Get product with specific intern article code |
 | POST | /login                   | API for login existing user                   |
 | POST | /register                | API for registration of existing user         |
+| GET  | /user-info               | Authorization to get user data                |
 
 #### Login example:
 ```json
@@ -19,6 +20,10 @@ To start the web service, you should use Apache server to run it.
     "email": "sm@test-mail.com"
 }
 ```
+
+#### User info example:
+Header Key: Authorization
+Header Value: Bearer {token}
 
 #### Registration example:
 ```json

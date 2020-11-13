@@ -5,3 +5,4 @@ RewriteRule ^api/get-product/([a-zA-Z0-9]+)?$ api/products/product_handler.php?i
 
 RewriteRule ^api/login/?$ api/auth/login.php
 RewriteRule ^api/register/?$ api/auth/register.php
+RewriteRule ^api/user-info/?$ api/auth/user-info.php
