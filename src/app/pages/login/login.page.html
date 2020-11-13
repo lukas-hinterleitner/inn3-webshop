@@ -59,6 +59,10 @@
                     </ion-button>
                 </ion-col>
             </ion-row>
+
+            <ion-row class="ion-justify-content-center" *ngIf="serverMessage != ''">
+                <ion-text color="danger">{{this.serverMessage}}</ion-text>
+            </ion-row>
         </form>
     </div>
 </ion-content>

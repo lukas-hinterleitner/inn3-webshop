@@ -5,6 +5,7 @@ import {Storage} from '@ionic/storage';
 import {UserData} from '../objects/user-data';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {UnsubscribeOnDestroyAdapter} from '../utilities/unsubscribe-on-destroy-adapter';
+import {CryptoService} from './crypto.service';
 
 @Injectable({
     providedIn: 'root'
@@ -36,24 +37,45 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter{
         }
     }
 
-    async login(userData: UserData): Promise<any> {
-        // TODO login and check data from server
+    async login(email: string, pwd: string): Promise<any> {
+        const body = {
+            pwd,
+            email
+        };
 
-        const headers = new HttpHeaders();
+        const response = await this.http.post("https://inn3-webshop.lukas-hinterleitner.at/api/login", body).toPromise();
+        //console.log(response);
 
-        headers.set('Access-Control-Allow-Origin', 'https://inn3-webshop.lukas-hinterleitner.at/api/');
+        // @ts-ignore
+        if (response.success !== 0) {
+            // @ts-ignore
+            const token = response.token;
 
-        this.subscriptions.add(this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/', {
-            headers
-        }).subscribe(data => {
-            console.log(data);
-        }));
+            const headers = new HttpHeaders();
+            headers.append('Authorization', `Bearer ${token}`);
 
+            const h1 = {
+                Authorization: `Bearer ${token}`
+            };
 
-        await this.storage.set(this.HAS_LOGGED_IN, true);
-        await this.storage.set(this.USER_DATA, userData);
-        this.loggedIn.next(true);
-        return window.dispatchEvent(new CustomEvent('user:login'));
+            const userdata = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/user-info', {headers: h1}).toPromise();
+            //console.log(userdata);
+
+            const userData = {
+                _firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
+                _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: CryptoService.hashSHA512('maxi1234')
+            };
+
+            //await this.storage.set(this.HAS_LOGGED_IN, true);
+            //await this.storage.set(this.USER_DATA, userData);
+
+            //this.loggedIn.next(true);
+
+            return {success: false, message: ''};
+        } else {
+            // @ts-ignore
+            return {success: false, message: response.message};
+        }
     }
 
     async logout(): Promise<any> {

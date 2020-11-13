@@ -9,6 +9,7 @@ import {LoadingService} from '../../services/loading.service';
 import {CryptoService} from '../../services/crypto.service';
 import {DarkModeService} from '../../services/dark-mode.service';
 import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-login',
@@ -20,6 +21,8 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
 
     public loginForm: FormGroup;
     public formValid: boolean;
+
+    public serverMessage: string;
 
     public validation_messages = {
         email: [
@@ -33,7 +36,7 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     };
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private formBuilder: FormBuilder,
-                private loadingService: LoadingService, private darkModeService: DarkModeService) {
+                private loadingService: LoadingService, private darkModeService: DarkModeService, private http: HttpClient) {
         super();
 
         this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
@@ -65,22 +68,16 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
 
         if (this.loginForm.valid) {
             const email: string = this.loginForm.get('email').value;
-            const password: string = CryptoService.hashSHA512(this.loginForm.get('password').value);
+            const password: string = this.loginForm.get('password').value;
 
-            // TODO encryption
-            // TODO get userdata from server
-            // without password
+            const response = await this.authenticationService.login(email, password);
 
-            // improvised userdata
-            const userData = {
-                _firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
-                _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: CryptoService.hashSHA512('maxi1234')
-            };
-
-            await this.authenticationService.login(userData);
-            await this.router.navigate(['/user/general']);
+            if (response.success) {
+                await this.router.navigate(['/user/general']);
+            } else {
+                this.serverMessage = response.message;
+            }
         } else {
-            // TODO view error messages
             this.loginForm.markAllAsTouched();
         }
 

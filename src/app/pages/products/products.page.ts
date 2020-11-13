@@ -19,7 +19,7 @@ export class ProductsPage extends UnsubscribeOnDestroyAdapter implements OnInit 
     public arr = Array(10);
     public productsLoaded: boolean;
 
-    constructor(private productService: ProductService, private loadingService: LoadingService, private darkModeService : DarkModeService) {
+    constructor(private productService: ProductService, private loadingService: LoadingService, private darkModeService: DarkModeService) {
         super();
 
         this.productsLoaded = false;
@@ -51,7 +51,7 @@ export class ProductsPage extends UnsubscribeOnDestroyAdapter implements OnInit 
     async ngOnInit() {
         await this.loadingService.showLoading();
 
-        this.products = this.productService.getAllProducts();
+        this.products = await this.productService.getAllProducts();
         this.filteredProducts = this.products;
         this.productsLoaded = true;
 

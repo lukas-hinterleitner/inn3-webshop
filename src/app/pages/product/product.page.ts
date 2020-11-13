@@ -39,7 +39,7 @@ export class ProductPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         if (this.activatedRoute.snapshot.paramMap.has('id')) {
             const productId = this.activatedRoute.snapshot.paramMap.get('id');
 
-            const product = this.productService.getProductById(productId);
+            const product = await this.productService.getProductById(productId);
 
             if (product !== undefined) {
                 this.product = product;
