@@ -23,6 +23,7 @@ To start the web service, you should use Apache server to run it.
 
 #### User info example header params:
 Header Key: Authorization
+
 Header Value: Bearer {token}
 
 #### Registration example body params:
