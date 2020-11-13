@@ -21,15 +21,11 @@ To start the web service, you should use Apache server to run it.
 }
 ```
 
-<<<<<<< HEAD
-#### User info example:
+#### User info example header params:
 Header Key: Authorization
 Header Value: Bearer {token}
 
-#### Registration example:
-=======
 #### Registration example body params:
->>>>>>> c5149614ebcdfbee4a39777fe535525ed9059a30
 ```json
 {
     "firstname": "Stefan",
