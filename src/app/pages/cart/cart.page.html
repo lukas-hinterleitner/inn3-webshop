@@ -3,7 +3,7 @@
         <ion-row class="ion-align-items-center">
             <ion-menu-button></ion-menu-button>
             <ion-title>Shopping Cart</ion-title>
-            <ion-col *ngIf="products.length > 0">
+            <ion-col [hidden]="!(products.length > 0)">
                 <ion-button color="danger" size="small" shape="round" (click)="clearCart()" class="ion-float-end">
                     <ion-icon name="trash" slot="icon-only"></ion-icon>
                 </ion-button>
@@ -14,11 +14,11 @@
 
 <ion-content class="ion-no-padding">
 
-    <div *ngIf="products.length === 0" id="container">
+    <div [hidden]="products.length !== 0" id="container">
         <h2>Cart is empty!</h2>
     </div>
 
-    <ng-container *ngIf="products.length > 0">
+    <div [hidden]="products.length === 0">
         <ion-card *ngFor="let cartProduct of products">
             <ion-item lines="none">
                 <ion-avatar slot="start">
@@ -26,37 +26,43 @@
                 </ion-avatar>
                 <ion-grid>
                     <ion-row class="ion-align-items-center">
-                        <ion-col class="ion-margin-end" size="auto">
+                        <ion-col class="ion-margin-end">
                             <ion-label>
-                                <h2>{{cartProduct.getProduct().getTitle()}}</h2>
-                                <h3><ion-text color="">{{cartProduct.getProduct().getPrice() | currency: 'EUR'}}</ion-text></h3>
+                                <h2>{{cartProduct.getProduct().getTitle() | slice:0: 20}} ...</h2>
+                                <h3>
+                                    <ion-text
+                                            color="">{{cartProduct.getProduct().getPrice() | currency: 'EUR'}}</ion-text>
+                                </h3>
                             </ion-label>
                         </ion-col>
+                        <ion-col class="ion-align-items-center">
+                            <ion-row class="ion-align-items-center">
+                                <ion-col>
+                                    <ion-item class="ion-no-padding">
+                                        <ion-label>Amount:</ion-label>
+                                        <ion-select interface="popover"
+                                                    (ionChange)="cartProduct.changeQuantity($event.target.value); updateProducts()"
+                                                    value="{{cartProduct.getQuantity()}}">
+                                            <ion-select-option value="{{i + 1}}"
+                                                               *ngFor="let _ of amount; index as i">{{i + 1}}</ion-select-option>
+                                        </ion-select>
+                                    </ion-item>
+                                </ion-col>
 
-                        <ion-col size="auto">
-                            <ion-item class="ion-no-padding">
-                                <ion-label>Amount:</ion-label>
-                                <ion-select interface="popover"
-                                            (ionChange)="cartProduct.changeQuantity($event.target.value); updateProducts()"
-                                            value="{{cartProduct.getQuantity()}}">
-                                    <ion-select-option value="{{i + 1}}"
-                                                       *ngFor="let _ of amount; index as i">{{i + 1}}</ion-select-option>
-                                </ion-select>
-                            </ion-item>
-                        </ion-col>
-
-                        <ion-col class="ion-no-margin">
-                            <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)"
-                                        class="ion-float-end">
-                                <ion-icon slot="start" name="close"></ion-icon>
-                                Remove
-                            </ion-button>
+                                <ion-col class="ion-margin-end">
+                                    <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)"
+                                                class="ion-float-end">
+                                        <ion-icon slot="start" name="close"></ion-icon>
+                                        Remove
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-item>
         </ion-card>
-    </ng-container>
+    </div>
 </ion-content>
 
 <ion-footer>

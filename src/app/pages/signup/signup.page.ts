@@ -5,6 +5,8 @@ import {LoadingService} from '../../services/loading.service';
 import {ToastService} from '../../services/toast.service';
 import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 import {DarkModeService} from '../../services/dark-mode.service';
+import {AuthenticationService} from '../../services/authentication.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-signup',
@@ -74,7 +76,7 @@ export class SignupPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     };
 
     constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService,
-                private darkModeService: DarkModeService) {
+                private darkModeService: DarkModeService, private authService: AuthenticationService, private router: Router) {
         super();
 
         // create form group
@@ -159,18 +161,25 @@ export class SignupPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             const user = {
                 _firstname: this.signupForm.get('firstname').value,
                 _lastname: this.signupForm.get('lastname').value,
-                _country : this.signupForm.get('country').value,
-                _city : this.signupForm.get('city').value,
-                _zip : this.signupForm.get('zip').value,
-                _address : this.signupForm.get('address').value,
-                _email : this.signupForm.get('email').value,
-                _password : this.signupForm.get('password').value,
+                _country: this.signupForm.get('country').value,
+                _city: this.signupForm.get('city').value,
+                _zip: this.signupForm.get('zip').value,
+                _address: this.signupForm.get('address').value,
+                _email: this.signupForm.get('email').value,
+                _password: this.signupForm.get('password').value,
             } as UserData;
 
-            // TODO send user data to server
+            const response = await this.authService.signup(user);
 
-            await this.loadingService.closeLoading();
-            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+            if (response.success) {
+                await this.loadingService.closeLoading();
+                await this.toastService.showToast(2500, response.message,
+                    'Please login to access your account.', 'success');
+                await this.router.navigate(['/login']);
+            } else {
+                await this.loadingService.closeLoading();
+                await this.toastService.showToast(2500, '', response.message, 'danger');
+            }
         }
     }
 

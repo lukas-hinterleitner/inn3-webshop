@@ -6,10 +6,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 import {LoadingService} from '../../services/loading.service';
 
-import {CryptoService} from '../../services/crypto.service';
 import {DarkModeService} from '../../services/dark-mode.service';
 import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 import {HttpClient} from '@angular/common/http';
+import {ToastService} from '../../services/toast.service';
 
 @Component({
     selector: 'app-login',
@@ -21,8 +21,6 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
 
     public loginForm: FormGroup;
     public formValid: boolean;
-
-    public serverMessage: string;
 
     public validation_messages = {
         email: [
@@ -36,7 +34,7 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     };
 
     constructor(private authenticationService: AuthenticationService, private router: Router, private formBuilder: FormBuilder,
-                private loadingService: LoadingService, private darkModeService: DarkModeService, private http: HttpClient) {
+                private loadingService: LoadingService, private darkModeService: DarkModeService, private toastService: ToastService) {
         super();
 
         this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
@@ -60,8 +58,7 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         }));
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     async login() {
         await this.loadingService.showLoading();
@@ -74,13 +71,14 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
 
             if (response.success) {
                 await this.router.navigate(['/user/general']);
+                await this.loadingService.closeLoading();
+                await this.toastService.showToast(2500, '', response.message, 'success');
             } else {
-                this.serverMessage = response.message;
+                await this.loadingService.closeLoading();
+                await this.toastService.showToast(2500, '', response.message, 'danger');
             }
         } else {
             this.loginForm.markAllAsTouched();
         }
-
-        await this.loadingService.closeLoading();
     }
 }

@@ -45,9 +45,9 @@ export class CartPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             });
         }));
 
-        this.authService.isLoggedIn().subscribe(value => {
+        this.subscriptions.add(this.authService.isLoggedIn().subscribe(value => {
             this.loggedIn = value;
-        });
+        }));
     }
 
     ngOnInit() {}

@@ -31,23 +31,6 @@ export class ProductsPage extends UnsubscribeOnDestroyAdapter implements OnInit 
         }));
     }
 
-    async getBase64ImageFromUrl(imageUrl) {
-        const res = await fetch(imageUrl);
-        const blob = await res.blob();
-
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.addEventListener('load', () => {
-                resolve(reader.result);
-            }, false);
-
-            reader.onerror = () => {
-                return reject(this);
-            };
-            reader.readAsDataURL(blob);
-        });
-    }
-
     async ngOnInit() {
         await this.loadingService.showLoading();
 
@@ -64,7 +47,7 @@ export class ProductsPage extends UnsubscribeOnDestroyAdapter implements OnInit 
         const query = event.target.value.toLowerCase();
         requestAnimationFrame(() => {
             this.filteredProducts = this.products.filter(product => {
-               return product.getTitle().toLowerCase().includes(query) || product.getDescription().toLowerCase().includes(query);
+                return product.getTitle().toLowerCase().includes(query) || product.getDescription().toLowerCase().includes(query);
             });
         });
 
