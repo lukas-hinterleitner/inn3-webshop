@@ -20,7 +20,6 @@ const routes: Routes = [
         path: 'checkout',
         loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutPageModule),
         canActivate: [AuthGuard],
-        canLoad: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
     {
@@ -53,21 +52,18 @@ const routes: Routes = [
         path: 'user/general',
         loadChildren: () => import('./pages/user/general/general.module').then(m => m.GeneralPageModule),
         canActivate: [AuthGuard],
-        canLoad: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
     {
         path: 'user/address',
         loadChildren: () => import('./pages/user/address/address.module').then(m => m.AddressPageModule),
         canActivate: [AuthGuard],
-        canLoad: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
     {
         path: 'user/password',
         loadChildren: () => import('./pages/user/password/password.module').then(m => m.PasswordPageModule),
         canActivate: [AuthGuard],
-        canLoad: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
 ];

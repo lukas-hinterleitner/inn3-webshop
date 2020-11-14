@@ -17,14 +17,16 @@
                             Shipment
                         </ion-card-title>
                         <ion-card-subtitle>
-                            Your items will be shipped to the following address. To change this address please go to
-                            your account settings.
+                            Your items will be shipped to the following address:
                         </ion-card-subtitle>
                         <ion-card-content>
-                            <p>{{user._firstname}} {{user._lastname}}</p>
-                            <p>{{user._city}} {{user._zip}}, {{user._address}}</p>
-                            <p>{{user._country}}</p>
+                            <p>- {{user._firstname}} {{user._lastname}}</p>
+                            <p>- {{user._city}} {{user._zip}}, {{user._address}}</p>
+                            <p>- {{user._country}}</p>
                         </ion-card-content>
+                        <ion-text>
+                            To change this address please go to your account settings.
+                        </ion-text>
                     </ion-card-header>
                 </ion-card>
             </ion-col>

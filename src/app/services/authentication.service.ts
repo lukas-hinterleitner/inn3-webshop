@@ -1,20 +1,18 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {Storage} from '@ionic/storage';
 
 import {UserData} from '../objects/user-data';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {UnsubscribeOnDestroyAdapter} from '../utilities/unsubscribe-on-destroy-adapter';
-import {CryptoService} from './crypto.service';
-import {RequestOptions} from 'https';
-import {repeat} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthenticationService extends UnsubscribeOnDestroyAdapter{
+export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
     private HAS_LOGGED_IN = 'hasLoggedIn';
     private USER_DATA = 'USER_DATA';
+    private USER_TOKEN = 'USER_TOKEN';
 
     private loggedIn = new ReplaySubject<boolean>(1);
     private user = new ReplaySubject<UserData>(1); // set buffer size to 1, so the last ONE update will be cached
@@ -45,36 +43,44 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter{
             email
         };
 
-        const response = await this.http.post("https://inn3-webshop.lukas-hinterleitner.at/api/login", body).toPromise() as AuthResponse;
+        const response = await this.http.post('https://inn3-webshop.lukas-hinterleitner.at/api/login', body).toPromise() as AuthResponse;
 
         if (response.success === 1) {
             const token = response.token as string;
 
-            const h1 = {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-            };
-
-            const h2 = new HttpHeaders({
+            const httpHeaders = new HttpHeaders({
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
             });
 
-            const userdata = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/user-info', {headers: h2}).toPromise();
+            const userDataResponse = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/user-info',
+                {headers: httpHeaders}).toPromise() as UserDataResponse;
 
-            const userData = {
-                _firstname: 'Max', _lastname: 'Mustermann', _country: 'Musterland', _city: 'Musterstadt',
-                _zip: '1111', _address: 'Musterstraße 1', _email: 'max.mustermann@ma.mu', _password: CryptoService.hashSHA512('maxi1234')
-            };
+            if (userDataResponse.success === 1) {
+                const user = userDataResponse.user;
 
-            // await this.storage.set(this.HAS_LOGGED_IN, true);
-            // await this.storage.set(this.USER_DATA, userData);
+                const userData = {
+                    _firstname: user.firstname,
+                    _lastname: user.lastname,
+                    _email: user.email,
+                    _country: user.country,
+                    _city: user.city,
+                    _address: user.address,
+                    _zip: user.zip,
+                } as UserData;
 
-            // this.loggedIn.next(true);
 
-            return {success: false, message: ''};
+                this.loggedIn.next(true);
+                this.user.next(userData);
+                await this.storage.set(this.USER_TOKEN, token);
+                await this.storage.set(this.USER_DATA, userData);
+                await this.storage.set(this.HAS_LOGGED_IN, true);
+
+                return {success: true, message: 'Successfully logged in!'};
+            } else {
+                return {success: false, message: 'Error getting user info. Please contact an admin!'};
+            }
         } else {
-            // @ts-ignore
             return {success: false, message: response.message};
         }
     }
@@ -113,7 +119,7 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter{
             zip: user._zip,
         };
 
-        const response = await this.http.post("https://inn3-webshop.lukas-hinterleitner.at/api/register", body).toPromise() as AuthResponse;
+        const response = await this.http.post('https://inn3-webshop.lukas-hinterleitner.at/api/register', body).toPromise() as AuthResponse;
 
         if (response.success === 1) {
             return {success: true, message: response.message};
@@ -133,4 +139,18 @@ export interface AuthResponse {
     status: number;
     message: string;
     token: string;
+}
+
+export interface UserDataResponse {
+    status: number;
+    success: number;
+    user: {
+        firstname: string;
+        lastname: string;
+        email: string;
+        country: string;
+        city: string;
+        address: string;
+        zip: string;
+    };
 }

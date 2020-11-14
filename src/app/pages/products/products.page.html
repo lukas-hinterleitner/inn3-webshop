@@ -30,7 +30,7 @@
 
     <ion-row [hidden]="!(productsLoaded && filteredProducts.length > 0)">
         <ion-col size-md="3" size-sm="6" size-xs="12" *ngFor="let product of filteredProducts">
-            <ion-card [routerLink]="['/product', product.getId()]" class="">
+            <ion-card [routerLink]="['/product', product.getId()]">
                 <ion-img [src]="product.getImage()"></ion-img>
                 <ion-card-header>
                     <ion-card-title>{{product.getTitle()}}</ion-card-title>
