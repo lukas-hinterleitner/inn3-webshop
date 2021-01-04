@@ -12,8 +12,9 @@ To start the web service, you should use Apache server to run it.
 | POST | /login                   | API for login existing user                   |
 | POST | /register                | API for registration of existing user         |
 | GET  | /user-info               | Authorization to get user data                |
+| PUT  | /users                   | API to update user data                       |
 
-#### Login example body params:
+#### Login example:
 ```json
 {
     "pwd": "MyPass1234",
@@ -21,17 +22,31 @@ To start the web service, you should use Apache server to run it.
 }
 ```
 
-#### User info example header params:
+#### User info example:
 Header Key: Authorization
-
 Header Value: Bearer {token}
 
-#### Registration example body params:
+#### Registration example:
 ```json
 {
     "firstname": "Stefan",
     "lastname": "Miljevic",
     "pwd": "MyPass1234",
+    "email": "sm@test-mail.com",
+    "country": "Austria",
+    "city": "Vienna",
+    "address": "MyAdress 42",
+    "zip": "1234"
+}
+```
+
+#### User update example:
+NOTE: 'pwd' property here is optional. if not set, password won't be changed.
+```json
+{
+    "id": 5,
+    "firstname": "Stefan",
+    "lastname": "Miljevic",
     "email": "sm@test-mail.com",
     "country": "Austria",
     "city": "Vienna",
