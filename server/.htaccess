@@ -16,3 +16,4 @@ RewriteRule ^api/users/?$ api/users/user_handler.php
 
 RewriteRule ^api/orders/?$ api/order/order_handler.php
 RewriteRule ^api/orders/([0-9]+)?$ api/order/order_handler.php?id=$1
+RewriteRule ^api/orders/([a-zA-Z0-9_.\-~]+)?$ api/order/order_handler.php?id=$1

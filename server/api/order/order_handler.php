@@ -20,13 +20,23 @@ $returnData = [];
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
   if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $data = $repo->getAllOrdersByUserId($id);
-    if ($data === null) {
-      $data = responseNotFoundUserId($id);
-      header("HTTP/1.1 404 Not Found");
-      exit(json_encode($data));
+    if (is_numeric($id)) {
+      $data = $repo->getAllOrdersByUserId($id);
+      if ($data === null) {
+        header("HTTP/1.1 404 Not Found");
+        $returnData = msg(0, 404, "Orders could not be found by userID: " . $id);
+      } else {
+        $returnData = $data;
+      }
+    } else {
+      $data = $repo->getOrderByNumber($id);
+      if ($data === null) {
+        header("HTTP/1.1 404 Not Found");
+        $returnData = msg(0, 404, "Orders could not be found by order number: " . $id);
+      } else {
+        $returnData = $data;
+      }
     }
-    $returnData = $data;
   }
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $data = json_decode(file_get_contents("php://input"));

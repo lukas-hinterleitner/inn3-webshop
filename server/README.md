@@ -14,6 +14,7 @@ To start the web service, you should use Apache server to run it.
 | GET  | /user-info               | Authorization to get user data                |
 | PUT  | /users                   | API to update user data                       |
 | GET  | /orders/:userId          | Fetch all orders of one user                  |
+| GET  | /orders/:orderNumber     | Fetch order by order number                   |
 | POST | /orders                  | Create new order                              |
 
 #### Login example:
@@ -67,8 +68,8 @@ NOTE: 'pwd' property here is optional. if not set, password won't be changed.
       "amount": 2
     },
     {
-        "productId": 64,
-        "amount": 4
+      "productId": 64,
+      "amount": 4
     }
   ]
 }

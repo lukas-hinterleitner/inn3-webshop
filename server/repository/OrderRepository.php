@@ -14,12 +14,107 @@ class OrderRepository
 
   public function getAllOrdersByUserId($userId)
   {
+    $data = array();
+    $order_stmt = $this->conn->prepare("SELECT * FROM `t_orders` WHERE `user_id`=?");
+    $order_stmt->bind_param('i', $userId);
+    if (!$order_stmt->execute()) {
+      return;
+    }
+    $result = $order_stmt->get_result();
+    $orders = array();
+    while ($row = $result->fetch_assoc()) {
+      if (!array_key_exists($row['order_number'], $orders)) {
+        $orders[$row['order_number']] = array();
+      }
+      array_push($orders[$row['order_number']], $row);
+    }
+    if (count($orders) > 0) {
+      $data = $this->prepareUserOrderData($orders);
+      return $data;
+    }
     return null;
+  }
+
+  private function prepareUserOrderData($orders)
+  {
+    $preparedData = array();
+    foreach ($orders as $orderNumber => $orderList) {
+      $preparedOrder = array();
+      $preparedOrder['orderNumber'] = $orderNumber;
+
+      $orderProducts = array();
+      $orderTotalCost = 0.0;
+
+      foreach ($orderList as $orderRow) {
+        $preparedOrder['orderDate'] = $orderRow['order_datetime'];
+        $orderTotalCost += (floatval($orderRow['product_price'] * $orderRow['amount']));
+        $orderProduct = array();
+        $prodId = $orderRow['product_id'];
+        $orderProduct['id'] = $prodId;
+        $orderProduct['name'] = $this->fetchProductName($prodId);
+        $orderProduct['price'] = $orderRow['product_price'];
+        $orderProduct['amount'] = $orderRow['amount'];
+        array_push($orderProducts, $orderProduct);
+      }
+      $preparedOrder['orderTotalCost'] = floatval($orderTotalCost);
+      $preparedOrder['orderProducts'] = $orderProducts;
+      array_push($preparedData, $preparedOrder);
+    }
+    return $preparedData;
+  }
+
+  private function fetchProductName($prodId)
+  {
+    $stmt = $this->conn->prepare("SELECT `name` FROM `t_products` WHERE id=?");
+    $stmt->bind_param("i", $prodId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+    if ($data === null) {
+      return "Unknown";
+    }
+    return $data['name'];
   }
 
   public function getOrderByNumber($orderNumber)
   {
+    $data = array();
+    $order_stmt = $this->conn->prepare("SELECT * FROM `t_orders` WHERE `order_number`=?");
+    $order_stmt->bind_param('s', $orderNumber);
+    if (!$order_stmt->execute()) {
+      return;
+    }
+    $result = $order_stmt->get_result();
+    $orders = array();
+    while ($row = $result->fetch_assoc()) {
+      $orders[] = $row;
+    }
+    if (count($orders) > 0) {
+      $data = $this->prepareOrderData($orders);
+      return $data;
+    }
     return null;
+  }
+
+  private function prepareOrderData($orders)
+  {
+    $preparedData = array();
+    $orderProducts = array();
+    $orderTotalCost = 0.0;
+    foreach ($orders as $order) {
+      $preparedData['orderNumber'] = $order['order_number'];
+      $preparedData['orderDate'] = $order['order_datetime'];
+      $orderProduct = array();
+      $orderProduct['id'] = $order['id'];
+      $orderProduct['name'] = $this->fetchProductName($order['product_id']);
+      $orderProduct['amount'] = $order['amount'];
+      $orderProduct['price'] = $order['product_price'];
+      $orderTotalCost += (floatval($order['product_price'] * $order['amount']));
+      array_push($orderProducts, $orderProduct);
+    }
+    $preparedData['orderProducts'] = $orderProducts;
+    $preparedData['orderTotalCost'] = floatval($orderTotalCost);
+    return $preparedData;
   }
 
   public function order($data)
