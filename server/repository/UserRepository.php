@@ -74,7 +74,7 @@ class UserRepository
       $pwd = password_hash($password, PASSWORD_DEFAULT);
       $stmt_pwd->bind_param('si', $pwd, $id);
       if (!$stmt_pwd->execute()) {
-        return msg(0, 404, $stmt->error);
+        return msg(0, 404, $stmt_pwd->error);
       }
     }
     return msg(1, 200, "User update was successfull");

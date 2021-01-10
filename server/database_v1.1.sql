@@ -42,11 +42,14 @@ CREATE TABLE IF NOT EXISTS `t_users`(
 CREATE TABLE IF NOT EXISTS `t_orders` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `product_id` INT(11),
+  `user_id` INT(11),
   `product_price` DECIMAL(10, 2) NOT NULL,
   `amount` INT(5) NOT NULL,
+  `order_number` VARCHAR(100) NOT NULL,
   `order_datetime` DATETIME NOT NULL,
   PRIMARY KEY(`id`),
-  FOREIGN KEY (`product_id`) REFERENCES `t_products`(`id`) 
+  FOREIGN KEY (`product_id`) REFERENCES `t_products`(`id`),
+  FOREIGN KEY (`user_id`) REFERENCES `t_users`(`id`) 
 );
 
 -------------------------------------------------
@@ -62,7 +65,7 @@ INSERT INTO `t_products`(
   `created`
 ) VALUES
 ('Echo Dot (4. Generation) | Smarter Lautsprecher mit Alexa', 'Wir stellen vor: der neue Echo Dot – unser beliebtester smarter Lautsprecher mit Alexa. Das geradlinige, kompakte Design sorgt für satten Klang, dank klarem Sound und ausgewogener Basswiedergabe.', 60.49, 'sml01', 'sml01.jpg', 10, NOW()),
-('Apple iPad Air (10,5 Zoll, Wi-Fi, 64GB) - Space Grau', 'Das neue iPad. Es ist dein digitales Notizbuch, dein mobiles Büro, dein Fotostudio, deine Spielkonsole und dein persönliches Kino. Mit dem A12 Bionic Chip, der genug Power für wichtige Apps und faszinierende Games hat. So kannst du Dokumente bearbeiten, während du online etwas recherchierst und gleichzeitig deine Kollegen über FaceTime anrufst. Mit dem Apple Pencil kannst du besonders leicht Notizen machen.', 369.50, 'ipad01', 'ipad01.jpg', 15, NOW()),
+('Apple iPad Air (10,5 Zoll, Wi-Fi, 64GB) - Space Grau', 'Das neue iPad. Es ist dein digitales Notizbuch, dein mobiles Büro, dein Fotostudio, deine Spielkonsole und dein persönliches Kino. Mit dem A12 Bionic Chip, der genug Power für wichtige Apps und faszinierende Games hat. So kannst du Dokumente bearbeiten, während du online etwas recherchierst und gleichzeitig deine Kollegen über FaceTime anrufst. Mit dem Apple Pencil kannst du besonders leicht Notizen machen.', 369.50, 'ipad01', 'ipad01', 15, NOW()),
 ('Samsung GALAXY S10 prism black G973F 128 GB Android 9.0', 'Das Galaxy S10 bietet ein Erlebnis, das einen neuen Standard für Smartphones setzen kann. Mit seinen neuen Features und der Ausstattung ist es besser als jedes bisherige Galaxy. Sie können Filme auf dem beeindruckenden Display anschauen, professionell aussehende Bilder schießen und Videos mit der Action Cam-Videostabilisierung aufnehmen. Dabei können Sie das Smartphone dank ausdauerndem Akku völlig sorgenfrei benutzen.', 571.00, 'samgal01', 'samgal01.jpg', 8, NOW()),
 ('Lenovo ThinkPad T490s', 'Wie alle ThinkPads wurde auch das T490s auf zwölf militärische Spezifikationen getestet und mehr als 200 Qualitätstests unterzogen, um sicherzugehen, dass es selbst unter Extrembedingungen reibungslos funktioniert. Ob arktische Wildnis, Wüstensandstürme, Schwerelosigkeit, Spritzwasser oder Erschütterungen – dieses Notebook lässt Sie nicht im Stich, was immer auch kommen mag. ', 1532.00, 'thinkp01', 'thinkp01.jpg', 13, NOW()),
 ('Apple iPhone SE 64 GB Schwarz', 'Das iPhone SE ist das leistungsstärkste 4,7"iPhone aller Zeiten. 1 Es hat den A13 Bionic, den schnellsten Smartphone Chip, für unglaubliche Leistung für Apps, Spiele und Fotografie. Porträtmodus für Porträts in Studioqualität und sechs Lichteffekte. Smart HDR der nächsten Generation für unglaubliche Details in den hellen und dunklen Bereichen. 4K Video in kinoreifer Qualität. Und alle erweiterten Funktionen von iOS. Mit einer langen Batterielaufzeit 2 und Wasserschutz 3 bekommst du viel von dem, was du am iPhone liebst, in einer kleineren Größe.', 466.90, 'iphone01', 'iphone01.jpg', 20, NOW()),

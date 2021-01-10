@@ -13,3 +13,6 @@ RewriteRule ^api/register/?$ api/auth/register.php
 RewriteRule ^api/user-info/?$ api/auth/user-info.php
 
 RewriteRule ^api/users/?$ api/users/user_handler.php
+
+RewriteRule ^api/orders/?$ api/order/order_handler.php
+RewriteRule ^api/orders/([0-9]+)?$ api/order/order_handler.php?id=$1

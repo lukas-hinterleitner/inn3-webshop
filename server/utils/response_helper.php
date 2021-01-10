@@ -16,6 +16,14 @@ function responseNotFoundInternCode($code)
   return $data;
 }
 
+function responseNotFoundUserId($id)
+{
+  $data = array();
+  $data['errorMsg'] = "No user found with id '$id'";
+  $data['errorCode'] = "404";
+  return $data;
+}
+
 function msg($success, $status, $message, $extra = [])
 {
   return array_merge([

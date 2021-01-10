@@ -13,6 +13,8 @@ To start the web service, you should use Apache server to run it.
 | POST | /register                | API for registration of existing user         |
 | GET  | /user-info               | Authorization to get user data                |
 | PUT  | /users                   | API to update user data                       |
+| GET  | /orders/:userId          | Fetch all orders of one user                  |
+| POST | /orders                  | Create new order                              |
 
 #### Login example:
 ```json
@@ -52,5 +54,22 @@ NOTE: 'pwd' property here is optional. if not set, password won't be changed.
     "city": "Vienna",
     "address": "MyAdress 42",
     "zip": "1234"
+}
+```
+
+#### Create new order example:
+```json
+{
+  "userId": 42,
+  "orders": [
+    {
+      "productId": 62,
+      "amount": 2
+    },
+    {
+        "productId": 64,
+        "amount": 4
+    }
+  ]
 }
 ```
