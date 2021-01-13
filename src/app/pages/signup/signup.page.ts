@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserData} from '../../objects/user-data';
 import {LoadingService} from '../../services/loading.service';
 import {ToastService} from '../../services/toast.service';
 import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
 import {DarkModeService} from '../../services/dark-mode.service';
-import {AuthenticationService} from '../../services/authentication.service';
+import {UserManagementService} from '../../services/user-management.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -76,7 +76,7 @@ export class SignupPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     };
 
     constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService,
-                private darkModeService: DarkModeService, private authService: AuthenticationService, private router: Router) {
+                private darkModeService: DarkModeService, private userManagementService: UserManagementService, private router: Router) {
         super();
 
         // create form group
@@ -159,17 +159,17 @@ export class SignupPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             await this.loadingService.showLoading();
 
             const user = {
-                _firstname: this.signupForm.get('firstname').value,
-                _lastname: this.signupForm.get('lastname').value,
-                _country: this.signupForm.get('country').value,
-                _city: this.signupForm.get('city').value,
-                _zip: this.signupForm.get('zip').value,
-                _address: this.signupForm.get('address').value,
-                _email: this.signupForm.get('email').value,
-                _password: this.signupForm.get('password').value,
+                firstname: this.signupForm.get('firstname').value,
+                lastname: this.signupForm.get('lastname').value,
+                country: this.signupForm.get('country').value,
+                city: this.signupForm.get('city').value,
+                zip: this.signupForm.get('zip').value,
+                address: this.signupForm.get('address').value,
+                email: this.signupForm.get('email').value,
+                pwd: this.signupForm.get('password').value,
             } as UserData;
 
-            const response = await this.authService.signup(user);
+            const response = await this.userManagementService.signup(user);
 
             if (response.success) {
                 await this.loadingService.closeLoading();

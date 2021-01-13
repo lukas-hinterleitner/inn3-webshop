@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserManagementService} from '../../../services/user-management.service';
 import {UserData} from '../../../objects/user-data';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoadingService} from '../../../services/loading.service';
@@ -13,13 +13,9 @@ import {DarkModeService} from '../../../services/dark-mode.service';
     styleUrls: ['./general.page.scss'],
 })
 export class GeneralPage extends UnsubscribeOnDestroyAdapter implements OnInit {
-    private user: UserData;
-
     public headerColor: string;
-
     public generalForm: FormGroup;
     public formValid = true;
-
     public validation_messages = {
         // name
         firstname: [
@@ -33,8 +29,9 @@ export class GeneralPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             {type: 'maxlength', message: 'Maximum 255 characters.'},
         ],
     };
+    private user: UserData;
 
-    constructor(private authService: AuthenticationService, private formBuilder: FormBuilder, private loadingService: LoadingService,
+    constructor(private userManagementService: UserManagementService, private formBuilder: FormBuilder, private loadingService: LoadingService,
                 private toastService: ToastService, private darkModeService: DarkModeService) {
         super();
 
@@ -53,11 +50,11 @@ export class GeneralPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             ])],
         });
 
-        this.subscriptions.add(this.authService.getUser().subscribe(user => {
+        this.subscriptions.add(this.userManagementService.getUser().subscribe(user => {
             this.user = user;
 
-            this.generalForm.get('firstname').setValue(this.user._firstname);
-            this.generalForm.get('lastname').setValue(this.user._lastname);
+            this.generalForm.get('firstname').setValue(this.user.firstname);
+            this.generalForm.get('lastname').setValue(this.user.lastname);
         }));
 
         this.subscriptions.add(this.generalForm.valueChanges.subscribe(() => {
@@ -69,7 +66,8 @@ export class GeneralPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         }));
     }
 
-    async ngOnInit() {}
+    async ngOnInit() {
+    }
 
     async updateGeneral() {
         this.generalForm.markAllAsTouched();
@@ -77,17 +75,14 @@ export class GeneralPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         if (this.generalForm.valid) {
             await this.loadingService.showLoading();
 
-            // TODO send update request to server
+            this.user.firstname = this.generalForm.get('firstname').value;
+            this.user.lastname = this.generalForm.get('lastname').value;
 
-            this.user._firstname = this.generalForm.get('firstname').value;
-            this.user._lastname = this.generalForm.get('lastname').value;
-
-            console.log(this.user);
-
-            await this.authService.updateUser(this.user);
+            const response = await this.userManagementService.updateUser(this.user);
 
             await this.loadingService.closeLoading();
-            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+            await this.toastService.showToast(2000, '', response.message,
+                response.success === 1 ? 'success' : 'danger');
         }
     }
 }

@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guards/auth.guard';
+import {CheckoutGuard} from './guards/checkout.guard';
 
 const routes: Routes = [
     {
@@ -19,7 +20,7 @@ const routes: Routes = [
     {
         path: 'checkout',
         loadChildren: () => import('./pages/checkout/checkout.module').then(m => m.CheckoutPageModule),
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, CheckoutGuard],
         runGuardsAndResolvers: 'always'
     },
     {
@@ -63,6 +64,18 @@ const routes: Routes = [
     {
         path: 'user/password',
         loadChildren: () => import('./pages/user/password/password.module').then(m => m.PasswordPageModule),
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'user/orders',
+        loadChildren: () => import('./pages/orders/orders.module').then(m => m.OrdersPageModule),
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: 'user/orders/:id',
+        loadChildren: () => import('./pages/order/order.module').then(m => m.OrderPageModule),
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },

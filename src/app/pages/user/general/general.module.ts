@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { GeneralPageRoutingModule } from './general-routing.module';
+import {GeneralPageRoutingModule} from './general-routing.module';
 
-import { GeneralPage } from './general.page';
+import {GeneralPage} from './general.page';
 
 @NgModule({
     imports: [
@@ -16,6 +16,7 @@ import { GeneralPage } from './general.page';
         GeneralPageRoutingModule,
         ReactiveFormsModule
     ],
-  declarations: [GeneralPage]
+    declarations: [GeneralPage]
 })
-export class GeneralPageModule {}
+export class GeneralPageModule {
+}

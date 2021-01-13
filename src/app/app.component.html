@@ -1,69 +1,81 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-header>
-        <ion-toolbar [color]="headerColor">
-          <ion-title>
-            NFC Webshop
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
+    <ion-split-pane contentId="main-content">
+        <ion-menu contentId="main-content" type="overlay">
+            <ion-header>
+                <ion-toolbar [color]="headerColor">
+                    <ion-title>
+                        NFC Webshop
+                    </ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
 
-        <ion-list class="main-menu">
-          <ion-note>Navigation</ion-note>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="currentPath = p.url" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="p.url == currentPath">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-              <ion-badge *ngIf="p.url === '/cart'" color="primary">{{productsInCart}}</ion-badge>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
+                <ion-list class="main-menu">
+                    <ion-note>Navigation</ion-note>
+                    <ion-menu-toggle *ngFor="let p of appPages; let i = index" auto-hide="false">
+                        <ion-item (click)="currentPath = p.url" [class.selected]="p.url == currentPath"
+                                  [routerLink]="[p.url]"
+                                  detail="false" lines="none" routerDirection="root">
+                            <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'" slot="start"></ion-icon>
+                            <ion-label>{{ p.title }}</ion-label>
+                            <ion-badge *ngIf="p.url === '/cart'" color="primary">{{productsInCart}}</ion-badge>
+                        </ion-item>
+                    </ion-menu-toggle>
+                </ion-list>
 
-        <ion-list class="main-menu">
-          <ion-note>Account</ion-note>
-          <div *ngIf="!isLoggedIn">
-            <ion-menu-toggle auto-hide="false" *ngFor="let authenticationPage of authenticationPages; let j = index">
-              <ion-item (click)="currentPath = authenticationPage.url" routerDirection="root" [routerLink]="[authenticationPage.url]" lines="none" detail="false" [class.selected]="authenticationPage.url == currentPath">
-                <ion-icon slot="start" [ios]="authenticationPage.icon + '-outline'" [md]="authenticationPage.icon + '-sharp'"></ion-icon>
-                <ion-label>{{ authenticationPage.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          </div>
+                <ion-list class="main-menu">
+                    <ion-note>Account</ion-note>
+                    <div *ngIf="!isLoggedIn">
+                        <ion-menu-toggle *ngFor="let authenticationPage of authenticationPages; let j = index"
+                                         auto-hide="false">
+                            <ion-item (click)="currentPath = authenticationPage.url"
+                                      [class.selected]="authenticationPage.url == currentPath"
+                                      [routerLink]="[authenticationPage.url]" detail="false" lines="none"
+                                      routerDirection="root">
+                                <ion-icon [ios]="authenticationPage.icon + '-outline'"
+                                          [md]="authenticationPage.icon + '-sharp'"
+                                          slot="start"></ion-icon>
+                                <ion-label>{{ authenticationPage.title }}</ion-label>
+                            </ion-item>
+                        </ion-menu-toggle>
+                    </div>
 
-          <div *ngIf="isLoggedIn">
-            <ion-menu-toggle auto-hide="false" *ngFor="let userPage of userPages; let j = index">
-              <ion-item (click)="currentPath = userPage.url" routerDirection="root" [routerLink]="[userPage.url]" lines="none" detail="false" [class.selected]="userPage.url == currentPath">
-                <ion-icon slot="start" [ios]="userPage.icon + '-outline'" [md]="userPage.icon + '-sharp'"></ion-icon>
-                <ion-label>{{ userPage.title }}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
+                    <div *ngIf="isLoggedIn">
+                        <ion-menu-toggle *ngFor="let userPage of userPages; let j = index" auto-hide="false">
+                            <ion-item (click)="currentPath = userPage.url"
+                                      [class.selected]="userPage.url == currentPath"
+                                      [routerLink]="[userPage.url]" detail="false" lines="none"
+                                      routerDirection="root">
+                                <ion-icon [ios]="userPage.icon + '-outline'" [md]="userPage.icon + '-sharp'"
+                                          slot="start"></ion-icon>
+                                <ion-label>{{ userPage.title }}</ion-label>
+                            </ion-item>
+                        </ion-menu-toggle>
 
-            <ion-menu-toggle autoHide="false">
-              <ion-item lines="none" button (click)="logout()" detail="false">
-                <ion-icon slot="start" name="log-out"></ion-icon>
-                <ion-label>
-                  Logout
-                </ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          </div>
-        </ion-list>
+                        <ion-menu-toggle autoHide="false">
+                            <ion-item (click)="logout()" button detail="false" lines="none">
+                                <ion-icon name="log-out" slot="start"></ion-icon>
+                                <ion-label>
+                                    Logout
+                                </ion-label>
+                            </ion-item>
+                        </ion-menu-toggle>
+                    </div>
+                </ion-list>
 
-        <ion-list>
-          <ion-note>Micellaneous</ion-note>
-          <ion-item lines="none">
-            <ion-icon slot="start" name="moon-outline"></ion-icon>
-            <ion-label>
-              Dark Mode
-            </ion-label>
-            <ion-toggle [(ngModel)]="darkMode" (ionChange)="toggleDarkMode(darkMode)"></ion-toggle>
-          </ion-item>
-        </ion-list>
+                <ion-list>
+                    <ion-note>Micellaneous</ion-note>
+                    <ion-item lines="none">
+                        <ion-icon name="moon-outline" slot="start"></ion-icon>
+                        <ion-label>
+                            Dark Mode
+                        </ion-label>
+                        <ion-toggle (ionChange)="toggleDarkMode(darkMode)" [(ngModel)]="darkMode"></ion-toggle>
+                    </ion-item>
+                </ion-list>
 
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
+            </ion-content>
+        </ion-menu>
+        <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
 </ion-app>

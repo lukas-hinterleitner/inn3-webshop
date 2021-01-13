@@ -4,7 +4,7 @@
             <ion-menu-button></ion-menu-button>
             <ion-title>Shopping Cart</ion-title>
             <ion-col [hidden]="!(products.length > 0)">
-                <ion-button color="danger" size="small" shape="round" (click)="clearCart()" class="ion-float-end">
+                <ion-button (click)="clearCart()" class="ion-float-end" color="danger" shape="round" size="small">
                     <ion-icon name="trash" slot="icon-only"></ion-icon>
                 </ion-button>
             </ion-col>
@@ -40,19 +40,21 @@
                                 <ion-col>
                                     <ion-item class="ion-no-padding">
                                         <ion-label>Amount:</ion-label>
-                                        <ion-select interface="popover"
-                                                    (ionChange)="cartProduct.changeQuantity($event.target.value); updateProducts()"
-                                                    value="{{cartProduct.getQuantity()}}">
-                                            <ion-select-option value="{{i + 1}}"
-                                                               *ngFor="let _ of amount; index as i">{{i + 1}}</ion-select-option>
+                                        <ion-select
+                                                (ionChange)="cartProduct.changeQuantity($event.target.value); updateProducts()"
+                                                interface="popover"
+                                                value="{{cartProduct.getQuantity()}}">
+                                            <ion-select-option *ngFor="let _ of amount; index as i"
+                                                               value="{{i + 1}}">{{i + 1}}</ion-select-option>
                                         </ion-select>
                                     </ion-item>
                                 </ion-col>
 
                                 <ion-col class="ion-margin-end">
-                                    <ion-button color="danger" shape="round" (click)="removeFromCart(cartProduct)"
-                                                class="ion-float-end">
-                                        <ion-icon slot="start" name="close"></ion-icon>
+                                    <ion-button (click)="removeFromCart(cartProduct)" class="ion-float-end"
+                                                color="danger"
+                                                shape="round">
+                                        <ion-icon name="close" slot="start"></ion-icon>
                                         Remove
                                     </ion-button>
                                 </ion-col>
@@ -73,8 +75,8 @@
             </ion-item>
         </ion-row>
         <ion-row class="ion-justify-content-center">
-            <ion-button [disabled]="products.length === 0" (click)="openCheckout()" shape="round" expand="full">
-                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+            <ion-button (click)="openCheckout()" [disabled]="products.length === 0" expand="full" shape="round">
+                <ion-icon name="arrow-forward" slot="end"></ion-icon>
                 Proceed to checkout
             </ion-button>
         </ion-row>

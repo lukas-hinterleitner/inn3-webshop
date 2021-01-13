@@ -4,7 +4,7 @@ import {ConfirmedValidator} from '../../signup/signup.page';
 import {LoadingService} from '../../../services/loading.service';
 import {ToastService} from '../../../services/toast.service';
 import {UserData} from '../../../objects/user-data';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserManagementService} from '../../../services/user-management.service';
 import {CryptoService} from '../../../services/crypto.service';
 import {UnsubscribeOnDestroyAdapter} from '../../../utilities/unsubscribe-on-destroy-adapter';
 import {DarkModeService} from '../../../services/dark-mode.service';
@@ -15,20 +15,16 @@ import {DarkModeService} from '../../../services/dark-mode.service';
     styleUrls: ['./password.page.scss'],
 })
 export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit {
-    private user: UserData;
-
     public headerColor: string;
-
     public passwordForm: FormGroup;
     public formValid: boolean;
-
     public validation_messages = {
         // old password
-        current_password: [
+        /*current_password: [
             {type: 'required', message: 'Password is required.'},
             {type: 'minlength', message: 'Must have at least 8 characters.'},
             {type: 'wrong_password', message: 'Passwords do not match.'}
-        ],
+        ],*/
 
         // new password
         new_password: [
@@ -41,26 +37,27 @@ export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit 
             {type: 'confirmed', message: 'Passwords do not match.'}
         ],
     };
+    private user: UserData;
 
     constructor(private formBuilder: FormBuilder, private loadingService: LoadingService, private toastService: ToastService,
-                private authService: AuthenticationService, private darkModeService: DarkModeService) {
+                private userManagementService: UserManagementService, private darkModeService: DarkModeService) {
         super();
 
         this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
             this.headerColor = headerColor;
         }));
 
-        this.subscriptions.add(this.authService.getUser().subscribe(user => {
+        this.subscriptions.add(this.userManagementService.getUser().subscribe(user => {
             this.user = user;
         }));
 
         // create form group
         this.passwordForm = this.formBuilder.group({
             // old password
-            current_password: ['', Validators.compose([
+            /*current_password: ['', Validators.compose([
                 Validators.minLength(8),
                 Validators.required,
-            ])],
+            ])],*/
 
             // new password
             new_password: ['', Validators.compose([
@@ -74,7 +71,7 @@ export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit 
 
         }, {
             validators: [
-                this.PasswordValidator('current_password'),
+                // this.PasswordValidator('current_password'),
                 ConfirmedValidator('new_password', 'confirm_new_password'),
             ]
         });
@@ -84,22 +81,8 @@ export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit 
         }));
     }
 
-    private PasswordValidator(controlName: string) {
-        return (formGroup: FormGroup) => {
-            const control = formGroup.controls[controlName];
-            if (control.errors && !control.errors.wrong_password) {
-                return;
-            }
-
-            if (CryptoService.hashSHA512(control.value) !== this.user._password) {
-                control.setErrors({wrong_password: true});
-            } else {
-                control.setErrors(null);
-            }
-        };
+    ngOnInit() {
     }
-
-    ngOnInit() {}
 
     async updatePassword() {
         this.passwordForm.markAllAsTouched();
@@ -107,9 +90,28 @@ export class PasswordPage extends UnsubscribeOnDestroyAdapter implements OnInit 
         if (this.passwordForm.valid) {
             await this.loadingService.showLoading();
 
+            this.user.pwd = this.passwordForm.get('new_password').value;
+
+            const response = await this.userManagementService.updateUser(this.user);
 
             await this.loadingService.closeLoading();
-            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+            await this.toastService.showToast(2000, '', response.message,
+                response.success === 1 ? 'success' : 'danger');
         }
+    }
+
+    private PasswordValidator(controlName: string) {
+        return (formGroup: FormGroup) => {
+            const control = formGroup.controls[controlName];
+            if (control.errors && !control.errors.wrong_password) {
+                return;
+            }
+
+            if (CryptoService.hashSHA512(control.value) !== this.user.pwd) {
+                control.setErrors({wrong_password: true});
+            } else {
+                control.setErrors(null);
+            }
+        };
     }
 }

@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { AddressPageRoutingModule } from './address-routing.module';
+import {AddressPageRoutingModule} from './address-routing.module';
 
-import { AddressPage } from './address.page';
+import {AddressPage} from './address.page';
 
 @NgModule({
     imports: [
@@ -16,6 +16,7 @@ import { AddressPage } from './address.page';
         AddressPageRoutingModule,
         ReactiveFormsModule
     ],
-  declarations: [AddressPage]
+    declarations: [AddressPage]
 })
-export class AddressPageModule {}
+export class AddressPageModule {
+}

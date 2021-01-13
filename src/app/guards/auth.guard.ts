@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, CanLoad, Route, RouterStateSnapshot, UrlSegment, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
 
-import {AuthenticationService} from '../services/authentication.service';
+import {UserManagementService} from '../services/user-management.service';
 
 import {ToastService} from '../services/toast.service';
 
@@ -12,7 +12,8 @@ import {ToastService} from '../services/toast.service';
 export class AuthGuard implements CanActivate, CanLoad {
     private isLoggedIn: boolean;
 
-    constructor(private authenticationService: AuthenticationService, private toastService: ToastService) {}
+    constructor(private authenticationService: UserManagementService, private toastService: ToastService) {
+    }
 
     canActivate(
         next: ActivatedRouteSnapshot,

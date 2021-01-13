@@ -32,8 +32,7 @@ export class DarkModeService {
         if (shouldAdd) {
             this.headerColor.next('');
             this.storage.set(this.DARK_MODE_STORAGE_KEY, true);
-        }
-        else {
+        } else {
             this.headerColor.next('primary');
             this.storage.set(this.DARK_MODE_STORAGE_KEY, false);
         }

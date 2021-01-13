@@ -20,9 +20,9 @@
                             Your items will be shipped to the following address:
                         </ion-card-subtitle>
                         <ion-card-content>
-                            <p>- {{user._firstname}} {{user._lastname}}</p>
-                            <p>- {{user._city}} {{user._zip}}, {{user._address}}</p>
-                            <p>- {{user._country}}</p>
+                            <p>- {{user.firstname}} {{user.lastname}}</p>
+                            <p>- {{user.city}} {{user.zip}}, {{user.address}}</p>
+                            <p>- {{user.country}}</p>
                         </ion-card-content>
                         <ion-text>
                             To change this address please go to your account settings.
@@ -73,12 +73,12 @@
         <ion-row class="ion-justify-content-center">
             <ion-item class="ion-text-xl-center" lines="none">
                 <ion-text style="padding-right: 5px;">I agree that my data will be stored on the server.</ion-text>
-                <ion-checkbox class="" [(ngModel)]="agreement"></ion-checkbox>
+                <ion-checkbox [(ngModel)]="agreement" class=""></ion-checkbox>
             </ion-item>
         </ion-row>
         <ion-row class="ion-justify-content-center">
-            <ion-button [disabled]="!agreement" (click)="sendInquiry()" shape="round" expand="full">
-                <ion-icon slot="end" name="send"></ion-icon>
+            <ion-button (click)="sendInquiry()" [disabled]="!agreement" expand="full" shape="round">
+                <ion-icon name="send" slot="end"></ion-icon>
                 Send inquiry
             </ion-button>
         </ion-row>

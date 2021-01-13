@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart.service';
 import {LoadingService} from '../../services/loading.service';
 import {CartProduct} from '../../objects/cart-product';
-import {AlertController, ModalController} from '@ionic/angular';
-import {AuthenticationService} from '../../services/authentication.service';
+import {AlertController} from '@ionic/angular';
+import {UserManagementService} from '../../services/user-management.service';
 import {ToastService} from '../../services/toast.service';
 import {Router} from '@angular/router';
 import {DarkModeService} from '../../services/dark-mode.service';
@@ -25,7 +25,7 @@ export class CartPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     public headerColor: string;
 
     constructor(private cartService: CartService, private loadingService: LoadingService, private alertController: AlertController,
-                private authService: AuthenticationService, private toastService: ToastService, private router: Router,
+                private userManagementService: UserManagementService, private toastService: ToastService, private router: Router,
                 private darkModeService: DarkModeService) {
         super();
 
@@ -45,12 +45,13 @@ export class CartPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             });
         }));
 
-        this.subscriptions.add(this.authService.isLoggedIn().subscribe(value => {
+        this.subscriptions.add(this.userManagementService.isLoggedIn().subscribe(value => {
             this.loggedIn = value;
         }));
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     async clearCart() {
         const alert = await this.alertController.create({

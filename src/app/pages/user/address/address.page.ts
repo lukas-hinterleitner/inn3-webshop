@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../services/authentication.service';
+import {UserManagementService} from '../../../services/user-management.service';
 import {UserData} from '../../../objects/user-data';
 import {LoadingService} from '../../../services/loading.service';
 import {ToastService} from '../../../services/toast.service';
@@ -13,10 +13,7 @@ import {DarkModeService} from '../../../services/dark-mode.service';
     styleUrls: ['./address.page.scss'],
 })
 export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
-    private user: UserData;
-
     public headerColor: string;
-
     public addressForm: FormGroup;
     public formValid = true;
     public validation_messages = {
@@ -42,8 +39,9 @@ export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             {type: 'maxlength', message: 'Maximum 255 characters.'},
         ],
     };
+    private user: UserData;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthenticationService, private loadingService: LoadingService,
+    constructor(private formBuilder: FormBuilder, private userManagementService: UserManagementService, private loadingService: LoadingService,
                 private toastService: ToastService, private darkModeService: DarkModeService) {
         super();
 
@@ -76,13 +74,13 @@ export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
             this.headerColor = headerColor;
         }));
 
-        this.subscriptions.add(this.authService.getUser().subscribe(user => {
+        this.subscriptions.add(this.userManagementService.getUser().subscribe(user => {
             this.user = user;
 
-            this.addressForm.get('country').setValue(this.user._country);
-            this.addressForm.get('city').setValue(this.user._city);
-            this.addressForm.get('zip').setValue(this.user._zip);
-            this.addressForm.get('address').setValue(this.user._address);
+            this.addressForm.get('country').setValue(this.user.country);
+            this.addressForm.get('city').setValue(this.user.city);
+            this.addressForm.get('zip').setValue(this.user.zip);
+            this.addressForm.get('address').setValue(this.user.address);
         }));
 
         this.subscriptions.add(this.addressForm.valueChanges.subscribe(() => {
@@ -90,7 +88,8 @@ export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         }));
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     async updateAddress() {
         this.addressForm.markAllAsTouched();
@@ -98,17 +97,16 @@ export class AddressPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         if (this.addressForm.valid) {
             await this.loadingService.showLoading();
 
-            // TODO send update request to server
+            this.user.country = this.addressForm.get('country').value;
+            this.user.city = this.addressForm.get('city').value;
+            this.user.zip = this.addressForm.get('zip').value;
+            this.user.address = this.addressForm.get('address').value;
 
-            this.user._country = this.addressForm.get('country').value;
-            this.user._city = this.addressForm.get('city').value;
-            this.user._zip = this.addressForm.get('zip').value;
-            this.user._address = this.addressForm.get('address').value;
-
-            await this.authService.updateUser(this.user);
+            const response = await this.userManagementService.updateUser(this.user);
 
             await this.loadingService.closeLoading();
-            await this.toastService.showToast(2000, '', 'Successfully updated!', 'success');
+            await this.toastService.showToast(2000, '', response.message,
+                response.success === 1 ? 'success' : 'danger');
         }
     }
 

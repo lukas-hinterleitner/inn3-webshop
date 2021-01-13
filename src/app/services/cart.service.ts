@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {CartProduct} from '../objects/cart-product';
-import {BehaviorSubject, ReplaySubject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {Product} from '../objects/product';
 import {ToastService} from './toast.service';
 
@@ -27,11 +27,57 @@ export class CartService {
         });
     }
 
+    // ===============================================================================================================================
+    async addToCart(cartProduct: CartProduct) {
+        if (this.cartProducts.has(cartProduct.getProduct().getId())) { // product already in cart
+            await this.toastService.showToast(2000, '', 'Product already in cart.', 'primary');
+        } else {
+            this.cartProducts.set(cartProduct.getProduct().getId(), cartProduct); // add product to cart
+            await this.toastService.showToast(2000, '',
+                cartProduct.getProduct().getTitle() + ' added to cart. Amount: ' + cartProduct.getQuantity(),
+                'success');
+        }
+
+        await this.updateProductsInCart();
+    }
+
+    // begin utility functions
+
+    async removeAllProductsFromCart() {
+        this.cartProducts.clear();
+        await this.updateProductsInCart();
+    }
+
+    async removeFromCart(product: CartProduct) {
+        this.cartProducts.delete(product.getProduct().getId());
+        await this.updateProductsInCart();
+    }
+
+    // end utility functions
+    // ===============================================================================================================================
+
+
+    // begin storage operations
+
+    getProductsInCart() {
+        return this.productsSubject;
+    }
+
+    async updateProductsInCart() {
+        await this.writeProductsToStorage();
+        this.notifySubscribers();
+    }
+
+    // end storage operations
+    // ===============================================================================================================================
+
+
+    // begin basic cart operations
+
     private notifySubscribers() {
         this.productsSubject.next(this.productsToArray());
     }
 
-    // begin utility functions
     // ===============================================================================================================================
     private productsToArray() {
         return Array.from(this.cartProducts.values());
@@ -48,11 +94,7 @@ export class CartService {
 
         return productMap;
     }
-    // end utility functions
-    // ===============================================================================================================================
 
-
-    // begin storage operations
     // ===============================================================================================================================
     private async writeProductsToStorage() {
         await this.storage.set(this.cartKey, this.productsToArray());
@@ -62,7 +104,7 @@ export class CartService {
         const items = await this.storage.get(this.cartKey);
         const cartProducts: CartProduct[] = [];
 
-        if (items.length > 0){
+        if (items.length > 0) {
             items.forEach((item, index) => {
                 const p = item.product;
                 cartProducts[index] = new CartProduct(new Product(p.id, p.title, p.description, p.price, p.image), item.quantity);
@@ -71,43 +113,7 @@ export class CartService {
 
         return this.productsFromArray(cartProducts);
     }
-    // end storage operations
-    // ===============================================================================================================================
 
-
-    // begin basic cart operations
-    // ===============================================================================================================================
-    async addToCart(cartProduct: CartProduct) {
-        if (this.cartProducts.has(cartProduct.getProduct().getId())) { // product already in cart
-            await this.toastService.showToast(2000, '', 'Product already in cart.', 'primary');
-        } else {
-            this.cartProducts.set(cartProduct.getProduct().getId(), cartProduct); // add product to cart
-            await this.toastService.showToast(2000, '',
-                cartProduct.getProduct().getTitle() + ' added to cart. Amount: ' + cartProduct.getQuantity(),
-                'success');
-        }
-
-        await this.updateProductsInCart();
-    }
-
-    async removeAllProductsFromCart() {
-        this.cartProducts.clear();
-        await this.updateProductsInCart();
-    }
-
-    async removeFromCart(product: CartProduct) {
-        this.cartProducts.delete(product.getProduct().getId());
-        await this.updateProductsInCart();
-    }
-
-    getProductsInCart() {
-        return this.productsSubject;
-    }
-
-    async updateProductsInCart() {
-        await this.writeProductsToStorage();
-        this.notifySubscribers();
-    }
     // end basic cart operations
     // ===============================================================================================================================
 }

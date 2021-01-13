@@ -8,8 +8,8 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <div id="container" class="ion-padding">
-        <form [formGroup]="generalForm" (ngSubmit)="updateGeneral()" [noValidate]="false">
+    <div class="ion-padding" id="container">
+        <form (ngSubmit)="updateGeneral()" [formGroup]="generalForm" [noValidate]="false">
             <ion-row class="ion-justify-content-center">
                 <ion-col size-lg="6" size-md="12">
                     <ion-list-header lines="full">
@@ -21,12 +21,13 @@
                 <ion-col size-lg="6" size-md="9">
                     <ion-item>
                         <ion-label position="floating">Firstname</ion-label>
-                        <ion-input name="firstname" formControlName="firstname" type="text"></ion-input>
+                        <ion-input formControlName="firstname" name="firstname" type="text"></ion-input>
                     </ion-item>
                     <div class="validation-errors">
                         <ng-container *ngFor="let validation of validation_messages.firstname">
-                            <div class="error-message" *ngIf="generalForm.get('firstname').hasError(validation.type) &&
-                                                          (generalForm.get('firstname').dirty || generalForm.get('firstname').touched)">
+                            <div *ngIf="generalForm.get('firstname').hasError(validation.type) &&
+                                                          (generalForm.get('firstname').dirty || generalForm.get('firstname').touched)"
+                                 class="error-message">
                                 {{ validation.message }}
                             </div>
                         </ng-container>
@@ -38,12 +39,13 @@
                 <ion-col size-lg="6" size-md="9">
                     <ion-item>
                         <ion-label position="floating">Lastname</ion-label>
-                        <ion-input name="lastname" formControlName="lastname" type="text"></ion-input>
+                        <ion-input formControlName="lastname" name="lastname" type="text"></ion-input>
                     </ion-item>
                     <div class="validation-errors">
                         <ng-container *ngFor="let validation of validation_messages.lastname">
-                            <div class="error-message" *ngIf="generalForm.get('lastname').hasError(validation.type) &&
-                                                          (generalForm.get('lastname').dirty || generalForm.get('lastname').touched)">
+                            <div *ngIf="generalForm.get('lastname').hasError(validation.type) &&
+                                                          (generalForm.get('lastname').dirty || generalForm.get('lastname').touched)"
+                                 class="error-message">
                                 {{ validation.message }}
                             </div>
                         </ng-container>
@@ -53,8 +55,8 @@
 
             <ion-row class="ion-justify-content-center">
                 <ion-col size-lg="6" size-md="9">
-                    <ion-button [disabled]="!formValid" shape="round" type="submit" expand="full" color="primary">
-                        <ion-icon slot="start" name="reload"></ion-icon>
+                    <ion-button [disabled]="!formValid" color="primary" expand="full" shape="round" type="submit">
+                        <ion-icon name="reload" slot="start"></ion-icon>
                         Update
                     </ion-button>
                 </ion-col>

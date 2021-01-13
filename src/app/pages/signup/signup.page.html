@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <form class="" id="container" [formGroup]="signupForm" (ngSubmit)="signup()" [noValidate]="false">
+    <form (ngSubmit)="signup()" [formGroup]="signupForm" [noValidate]="false" class="" id="container">
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="12">
                 <ion-list-header lines="full">
@@ -20,12 +20,13 @@
             <ion-col size-lg="3" size-md="6">
                 <ion-item>
                     <ion-label position="floating">Firstname</ion-label>
-                    <ion-input name="firstname" formControlName="firstname"></ion-input>
+                    <ion-input formControlName="firstname" name="firstname"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.firstname">
-                        <div class="error-message" *ngIf="signupForm.get('firstname').hasError(validation.type) &&
-                                                          (signupForm.get('firstname').dirty || signupForm.get('firstname').touched)">
+                        <div *ngIf="signupForm.get('firstname').hasError(validation.type) &&
+                                                          (signupForm.get('firstname').dirty || signupForm.get('firstname').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -34,12 +35,13 @@
             <ion-col size-lg="3" size-md="6">
                 <ion-item>
                     <ion-label position="floating">Lastname</ion-label>
-                    <ion-input name="lastname" formControlName="lastname"></ion-input>
+                    <ion-input formControlName="lastname" name="lastname"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.lastname">
-                        <div class="error-message" *ngIf="signupForm.get('lastname').hasError(validation.type) &&
-                                                          (signupForm.get('lastname').dirty || signupForm.get('lastname').touched)">
+                        <div *ngIf="signupForm.get('lastname').hasError(validation.type) &&
+                                                          (signupForm.get('lastname').dirty || signupForm.get('lastname').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -58,12 +60,13 @@
             <ion-col size-lg="3" size-md="6">
                 <ion-item>
                     <ion-label position="floating">Country</ion-label>
-                    <ion-input name="country" formControlName="country"></ion-input>
+                    <ion-input formControlName="country" name="country"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.country">
-                        <div class="error-message" *ngIf="signupForm.get('country').hasError(validation.type) &&
-                                                          (signupForm.get('country').dirty || signupForm.get('country').touched)">
+                        <div *ngIf="signupForm.get('country').hasError(validation.type) &&
+                                                          (signupForm.get('country').dirty || signupForm.get('country').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -72,12 +75,13 @@
             <ion-col size-lg="3" size-md="6">
                 <ion-item>
                     <ion-label position="floating">City</ion-label>
-                    <ion-input name="city" formControlName="city"></ion-input>
+                    <ion-input formControlName="city" name="city"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.city">
-                        <div class="error-message" *ngIf="signupForm.get('city').hasError(validation.type) &&
-                                                          (signupForm.get('city').dirty || signupForm.get('city').touched)">
+                        <div *ngIf="signupForm.get('city').hasError(validation.type) &&
+                                                          (signupForm.get('city').dirty || signupForm.get('city').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -88,12 +92,13 @@
             <ion-col size-lg="2" size-md="4" size-sm="4" size-xs="4">
                 <ion-item>
                     <ion-label position="floating">ZIP</ion-label>
-                    <ion-input name="zip" formControlName="zip"></ion-input>
+                    <ion-input formControlName="zip" name="zip"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.zip">
-                        <div class="error-message" *ngIf="signupForm.get('zip').hasError(validation.type) &&
-                                                          (signupForm.get('zip').dirty || signupForm.get('zip').touched)">
+                        <div *ngIf="signupForm.get('zip').hasError(validation.type) &&
+                                                          (signupForm.get('zip').dirty || signupForm.get('zip').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -102,12 +107,13 @@
             <ion-col size-lg="4" size-md="8" size-sm="8" size-xs="8">
                 <ion-item>
                     <ion-label position="floating">Address</ion-label>
-                    <ion-input name="address" formControlName="address"></ion-input>
+                    <ion-input formControlName="address" name="address"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.address">
-                        <div class="error-message" *ngIf="signupForm.get('address').hasError(validation.type) &&
-                                                          (signupForm.get('address').dirty || signupForm.get('address').touched)">
+                        <div *ngIf="signupForm.get('address').hasError(validation.type) &&
+                                                          (signupForm.get('address').dirty || signupForm.get('address').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -126,12 +132,13 @@
             <ion-col size-lg="6" size-md="9">
                 <ion-item>
                     <ion-label position="floating">Email</ion-label>
-                    <ion-input name="email" formControlName="email"></ion-input>
+                    <ion-input formControlName="email" name="email"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.email">
-                        <div class="error-message" *ngIf="signupForm.get('email').hasError(validation.type) &&
-                                                          (signupForm.get('email').dirty || signupForm.get('email').touched)">
+                        <div *ngIf="signupForm.get('email').hasError(validation.type) &&
+                                                          (signupForm.get('email').dirty || signupForm.get('email').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -142,12 +149,13 @@
             <ion-col size-lg="6" size-md="9">
                 <ion-item>
                     <ion-label position="floating">Confirm Email</ion-label>
-                    <ion-input name="confirm_email" formControlName="confirm_email"></ion-input>
+                    <ion-input formControlName="confirm_email" name="confirm_email"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.confirm_email">
-                        <div class="error-message" *ngIf="signupForm.get('confirm_email').hasError(validation.type) &&
-                                                          (signupForm.get('confirm_email').dirty || signupForm.get('confirm_email').touched)">
+                        <div *ngIf="signupForm.get('confirm_email').hasError(validation.type) &&
+                                                          (signupForm.get('confirm_email').dirty || signupForm.get('confirm_email').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -159,12 +167,13 @@
             <ion-col size-lg="3" size-md="9">
                 <ion-item>
                     <ion-label position="floating">Password</ion-label>
-                    <ion-input name="password" formControlName="password" type="password"></ion-input>
+                    <ion-input formControlName="password" name="password" type="password"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.password">
-                        <div class="error-message" *ngIf="signupForm.get('password').hasError(validation.type) &&
-                                                          (signupForm.get('password').dirty || signupForm.get('password').touched)">
+                        <div *ngIf="signupForm.get('password').hasError(validation.type) &&
+                                                          (signupForm.get('password').dirty || signupForm.get('password').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -173,12 +182,13 @@
             <ion-col size-lg="3" size-md="9">
                 <ion-item>
                     <ion-label position="floating">Confirm Password</ion-label>
-                    <ion-input name="confirm_password" formControlName="confirm_password" type="password"></ion-input>
+                    <ion-input formControlName="confirm_password" name="confirm_password" type="password"></ion-input>
                 </ion-item>
                 <div class="validation-errors">
                     <ng-container *ngFor="let validation of validation_messages.confirm_password">
-                        <div class="error-message" *ngIf="signupForm.get('confirm_password').hasError(validation.type) &&
-                                                          (signupForm.get('confirm_password').dirty || signupForm.get('confirm_password').touched)">
+                        <div *ngIf="signupForm.get('confirm_password').hasError(validation.type) &&
+                                                          (signupForm.get('confirm_password').dirty || signupForm.get('confirm_password').touched)"
+                             class="error-message">
                             {{ validation.message }}
                         </div>
                     </ng-container>
@@ -188,8 +198,8 @@
 
         <ion-row class="ion-justify-content-center">
             <ion-col size-lg="6" size-md="9">
-                <ion-button [disabled]="!formValid" shape="round" type="submit" expand="full" color="primary">
-                    <ion-icon slot="start" name="log-in"></ion-icon>
+                <ion-button [disabled]="!formValid" color="primary" expand="full" shape="round" type="submit">
+                    <ion-icon name="log-in" slot="start"></ion-icon>
                     Sign Up
                 </ion-button>
             </ion-col>

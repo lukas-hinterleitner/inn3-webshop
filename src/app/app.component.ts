@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 
-import {AuthenticationService} from './services/authentication.service';
+import {UserManagementService} from './services/user-management.service';
 import {LoadingService} from './services/loading.service';
 import {CartService} from './services/cart.service';
 import {DarkModeService} from './services/dark-mode.service';
@@ -72,6 +72,11 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter {
             icon: 'lock-open'
         },
         {
+            title: 'Orders',
+            url: 'user/orders',
+            icon: 'list'
+        },
+        {
             title: 'Payment',
             url: '/user/payment',
             icon: 'card'
@@ -82,7 +87,7 @@ export class AppComponent extends UnsubscribeOnDestroyAdapter {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private authenticationService: AuthenticationService,
+        private authenticationService: UserManagementService,
         private router: Router,
         private loadingService: LoadingService,
         private cartService: CartService,

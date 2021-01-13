@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { GeneralPage } from './general.page';
+import {GeneralPage} from './general.page';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: GeneralPage
-  }
+    {
+        path: '',
+        component: GeneralPage
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
-export class GeneralPageRoutingModule {}
+export class GeneralPageRoutingModule {
+}

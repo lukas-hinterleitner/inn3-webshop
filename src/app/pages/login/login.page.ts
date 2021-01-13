@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../services/authentication.service';
+import {UserManagementService} from '../../services/user-management.service';
 
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -8,7 +8,6 @@ import {LoadingService} from '../../services/loading.service';
 
 import {DarkModeService} from '../../services/dark-mode.service';
 import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
-import {HttpClient} from '@angular/common/http';
 import {ToastService} from '../../services/toast.service';
 
 @Component({
@@ -33,7 +32,7 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         ],
     };
 
-    constructor(private authenticationService: AuthenticationService, private router: Router, private formBuilder: FormBuilder,
+    constructor(private authenticationService: UserManagementService, private router: Router, private formBuilder: FormBuilder,
                 private loadingService: LoadingService, private darkModeService: DarkModeService, private toastService: ToastService) {
         super();
 
@@ -58,7 +57,8 @@ export class LoginPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         }));
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     async login() {
         await this.loadingService.showLoading();

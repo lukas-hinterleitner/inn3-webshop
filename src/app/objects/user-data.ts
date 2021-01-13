@@ -1,15 +1,17 @@
 export interface UserData {
+    id: string;
+
     // general
-    _firstname: string;
-    _lastname: string;
+    firstname: string;
+    lastname: string;
 
     // address
-    _country: string;
-    _city: string;
-    _zip: string;
-    _address: string;
+    country: string;
+    city: string;
+    zip: string;
+    address: string;
 
     // credentials
-    _email: string;
-    _password: string;
+    email: string;
+    pwd: string;
 }

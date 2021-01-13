@@ -9,7 +9,7 @@ import {UnsubscribeOnDestroyAdapter} from '../utilities/unsubscribe-on-destroy-a
 @Injectable({
     providedIn: 'root'
 })
-export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
+export class UserManagementService extends UnsubscribeOnDestroyAdapter {
     private HAS_LOGGED_IN = 'hasLoggedIn';
     private USER_DATA = 'USER_DATA';
     private USER_TOKEN = 'USER_TOKEN';
@@ -43,7 +43,7 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
             email
         };
 
-        const response = await this.http.post('https://inn3-webshop.lukas-hinterleitner.at/api/login', body).toPromise() as AuthResponse;
+        const response = await this.http.post<AuthResponse>('https://inn3-webshop.lukas-hinterleitner.at/api/login', body).toPromise();
 
         if (response.success === 1) {
             const token = response.token as string;
@@ -53,22 +53,11 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
                 Authorization: `Bearer ${token}`
             });
 
-            const userDataResponse = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/user-info',
-                {headers: httpHeaders}).toPromise() as UserDataResponse;
+            const userDataResponse = await this.http.get<UserDataResponse>('https://inn3-webshop.lukas-hinterleitner.at/api/user-info',
+                {headers: httpHeaders}).toPromise();
 
             if (userDataResponse.success === 1) {
-                const user = userDataResponse.user;
-
-                const userData = {
-                    _firstname: user.firstname,
-                    _lastname: user.lastname,
-                    _email: user.email,
-                    _country: user.country,
-                    _city: user.city,
-                    _address: user.address,
-                    _zip: user.zip,
-                } as UserData;
-
+                const userData = userDataResponse.user;
 
                 this.loggedIn.next(true);
                 this.user.next(userData);
@@ -96,10 +85,17 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
         return this.user;
     }
 
-    async updateUser(user: UserData) {
-        await this.storage.remove(this.USER_DATA);
-        await this.storage.set(this.USER_DATA, user);
-        this.user.next(user);
+    async updateUser(user: UserData): Promise<Response> {
+        const response = await this.http.put<Response>('https://inn3-webshop.lukas-hinterleitner.at/api/users', user,
+            {}).toPromise();
+
+        if (response.status === 1) {
+            await this.storage.remove(this.USER_DATA);
+            await this.storage.set(this.USER_DATA, user);
+            this.user.next(user);
+        }
+
+        return response;
     }
 
     isLoggedIn(): Observable<boolean> {
@@ -109,17 +105,17 @@ export class AuthenticationService extends UnsubscribeOnDestroyAdapter {
     async signup(user: UserData): Promise<AuthInfo> {
 
         const body = {
-            firstname: user._firstname,
-            lastname: user._lastname,
-            pwd: user._password,
-            email: user._email,
-            country: user._country,
-            city: user._city,
-            address: user._address,
-            zip: user._zip,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            pwd: user.pwd,
+            email: user.email,
+            country: user.country,
+            city: user.city,
+            address: user.address,
+            zip: user.zip,
         };
 
-        const response = await this.http.post('https://inn3-webshop.lukas-hinterleitner.at/api/register', body).toPromise() as AuthResponse;
+        const response = await this.http.post<AuthResponse>('https://inn3-webshop.lukas-hinterleitner.at/api/register', body).toPromise();
 
         if (response.success === 1) {
             return {success: true, message: response.message};
@@ -134,6 +130,12 @@ export interface AuthInfo {
     message: string;
 }
 
+export interface Response {
+    success: number;
+    status: number;
+    message: string;
+}
+
 export interface AuthResponse {
     success: number;
     status: number;
@@ -144,7 +146,9 @@ export interface AuthResponse {
 export interface UserDataResponse {
     status: number;
     success: number;
-    user: {
+    user: UserData;
+    /*user: {
+        id: string;
         firstname: string;
         lastname: string;
         email: string;
@@ -152,5 +156,5 @@ export interface UserDataResponse {
         city: string;
         address: string;
         zip: string;
-    };
+    };*/
 }

@@ -26,11 +26,6 @@ export class ProductService extends UnsubscribeOnDestroyAdapter {
         // this.products.set(newProduct.getId(), newProduct);
     }
 
-    private createProductFromApiEntity(product) {
-        return new Product(product.id, product.name, product.description, product.price,
-            'https://inn3-webshop.lukas-hinterleitner.at/api' + product.imgPath);
-    }
-
     async getAllProducts() {
         // TODO get products from server
         const products = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/products').toPromise() as [];
@@ -45,11 +40,16 @@ export class ProductService extends UnsubscribeOnDestroyAdapter {
     }
 
     async getProductById(id: string) {
-        const product = await this.http.get("https://inn3-webshop.lukas-hinterleitner.at/api/products/" + id).toPromise();
+        const product = await this.http.get('https://inn3-webshop.lukas-hinterleitner.at/api/products/' + id).toPromise();
 
         // @ts-ignore
         return new Product(product.id, product.name, product.description, product.price,
-        // @ts-ignore
+            // @ts-ignore
+            'https://inn3-webshop.lukas-hinterleitner.at/api' + product.imgPath);
+    }
+
+    private createProductFromApiEntity(product) {
+        return new Product(product.id, product.name, product.description, product.price,
             'https://inn3-webshop.lukas-hinterleitner.at/api' + product.imgPath);
     }
 }
