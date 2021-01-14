@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {UnsubscribeOnDestroyAdapter} from '../../utilities/unsubscribe-on-destroy-adapter';
-import {DarkModeService} from '../../services/dark-mode.service';
-import {UserManagementService} from '../../services/user-management.service';
-import {OrderService, PlacedOrder} from '../../services/order.service';
+import {UnsubscribeOnDestroyAdapter} from '../../../utilities/unsubscribe-on-destroy-adapter';
+import {DarkModeService} from '../../../services/dark-mode.service';
+import {UserManagementService} from '../../../services/user-management.service';
+import {OrderService, PlacedOrder} from '../../../services/order.service';
+import {LoadingService} from '../../../services/loading.service';
 
 @Component({
     selector: 'app-orders',
@@ -15,7 +16,7 @@ export class OrdersPage extends UnsubscribeOnDestroyAdapter implements OnInit {
     public headerColor: string;
 
     constructor(private darkModeService: DarkModeService, private userManagementService: UserManagementService,
-                private orderService: OrderService) {
+                private orderService: OrderService, private loadingService: LoadingService) {
         super();
 
         this.subscriptions.add(this.darkModeService.getHeaderColor().subscribe(headerColor => {
@@ -23,7 +24,11 @@ export class OrdersPage extends UnsubscribeOnDestroyAdapter implements OnInit {
         }));
 
         this.subscriptions.add(this.userManagementService.getUser().subscribe(async user => {
+            await this.loadingService.showLoading();
+
             this.orders = await this.orderService.getOrders(user);
+
+            await this.loadingService.closeLoading();
         }));
     }
 

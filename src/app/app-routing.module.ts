@@ -69,13 +69,13 @@ const routes: Routes = [
     },
     {
         path: 'user/orders',
-        loadChildren: () => import('./pages/orders/orders.module').then(m => m.OrdersPageModule),
+        loadChildren: () => import('./pages/user/orders/orders.module').then(m => m.OrdersPageModule),
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },
     {
-        path: 'user/orders/:id',
-        loadChildren: () => import('./pages/order/order.module').then(m => m.OrderPageModule),
+        path: 'user/orders/:order-number',
+        loadChildren: () => import('./pages/user/order/order.module').then(m => m.OrderPageModule),
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always'
     },

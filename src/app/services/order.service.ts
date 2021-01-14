@@ -19,7 +19,17 @@ export class OrderService extends UnsubscribeOnDestroyAdapter {
     }
 
     async getOrders(user: UserData) {
-        return await this.httpClient.get<PlacedOrder[]>('https://inn3-webshop.lukas-hinterleitner.at/api/orders/' + user.id,
+        return await this.httpClient.get<PlacedOrder[]>('https://inn3-webshop.lukas-hinterleitner.at/api/orders/' + user.id, {}).toPromise()
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                return [];
+            });
+    }
+
+    async getOrder(orderNumber: string) {
+        return await this.httpClient.get<PlacedOrder>('https://inn3-webshop.lukas-hinterleitner.at/api/orders/' + orderNumber,
             {}).toPromise();
     }
 }

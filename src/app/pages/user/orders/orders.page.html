@@ -7,15 +7,19 @@
 </ion-header>
 
 <ion-content>
-    <ion-card *ngFor="let order of orders;" [routerLink]="['/user/orders', order.orderNumber]">
+    <div [hidden]="orders.length > 0" id="container">
+        <h2>No Orders found!</h2>
+    </div>
+
+    <ion-card [hidden]="orders.length === 0" *ngFor="let order of orders;" [routerLink]="['/user/orders', order.orderNumber]">
         <ion-card-header>
             <ion-card-title>
                 <ion-row>
                     <ion-col>
-                        Date: {{order.orderDate}}
+                        {{order.orderDate}}
                     </ion-col>
                     <ion-col size="*" class="ion-float-end">
-                        Total costs: {{order.orderTotalCost | currency:'EUR'}}
+                        {{order.orderTotalCost | currency:'EUR'}}
                     </ion-col>
                 </ion-row>
             </ion-card-title>
